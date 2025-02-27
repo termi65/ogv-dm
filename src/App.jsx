@@ -1,10 +1,28 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+import supabase from './subabase';
+
+
 function App() {
-  const [count, setCount] = useState(0)
+    const [count, setCount] = useState(0);
+    const [mitglieder, setMitglieder] = useState([]);
+    
+    useEffect(() => {
+        const getMitglieder = async () => {
+            const { data, error } = await supabase.from('mitglieder').select('*');
+            if (error) {
+                console.error("Fehler beim Abrufen der Mitglieder:", error);
+            } else {
+                console.log(`Anzahl Mitglieder: ${data.length}`, data);
+                setMitglieder(data);
+            }
+        };
+    
+        getMitglieder();
+    }, []);
 
   return (
     <>
