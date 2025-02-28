@@ -1,52 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import Verzehr from "./components/Verzehr";
+// import Getraenke from "./components/Getraenke";
+// import Getraenk from "./components/Getraenk";
+import Mitglieder from "./components/Mitglieder";
+import Menu from "./components/Menu";
+import Home from "./components/Home";
+// import Mitglied from "./components/Mitglied";
+// import AddMitglied from "./components/AddMitglied";
+// import AddKundenVerzehr from "./components/AddKundenVerzehr";
+// import AddVerzehr from "./components/AddVerzehr";
+
 import './App.css'
 
-import supabase from './subabase';
+
 
 
 function App() {
-    const [count, setCount] = useState(0);
-    const [mitglieder, setMitglieder] = useState([]);
-    
-    useEffect(() => {
-        const getMitglieder = async () => {
-            const { data, error } = await supabase.from('mitglieder').select('*');
-            if (error) {
-                console.error("Fehler beim Abrufen der Mitglieder:", error);
-            } else {
-                console.log(`Anzahl Mitglieder: ${data.length}`, data);
-                setMitglieder(data);
-            }
-        };
-    
-        getMitglieder();
-    }, []);
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Router basename="/">
+        <div>
+            <Menu />
+            <div className="content">
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    {/* <Route path="/verzehr" element={<Verzehr />} />
+                    <Route path="/addverzehr" element={<AddVerzehr />} />
+                    <Route path="/addKundenverzehr/:mitglied_id" element={<AddKundenVerzehr />} />
+                    <Route path="/getraenke" element={<Getraenke/>} />
+                    <Route path="/updategetraenk/:id" element={<Getraenk />} />
+                    <Route path="/addgetraenk" element={<Getraenk />} /> */}
+                    <Route path="/mitglieder" element={<Mitglieder />} />
+                    {/* <Route path="/edit/:id" element={<Mitglied />} />
+                    <Route path="/addmitglied" element={<AddMitglied />} /> */}
+                </Routes>
+            </div>
+        </div>
+    </Router>
   )
 }
 

@@ -14,7 +14,7 @@ export default defineConfig({
       manifest: {
         name: 'OGV-PW',
         short_name: 'PWA',
-        description: 'Eine Progressive Web App mit Vite und React',
+        description: 'Deckelmanagement für den OGV',
         theme_color: '#ffffff',
         icons: [
           {
