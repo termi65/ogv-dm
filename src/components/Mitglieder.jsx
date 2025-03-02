@@ -32,29 +32,26 @@ const Mitglieder = () => {
     }
 
     const ladeDaten = async () => {
-        const getData = async () => {
-            try {
-                const [mitgliederRes, verzehrRes] = await Promise.all([
-                    supabase.from('mitglieder').select('*'),
-                    supabase.from('verzehr').select('*')
-                ]);
-                if (mitgliederRes.error || verzehrRes.error) {
-                    throw new Error("Fehler beim Lesen Mitglieder/Verzehr:" + mitgliederRes.error + "," + verzehrRes.error);
-                }
-                setMitglieder(mitgliederRes.data);
-                setVerzehr(verzehrRes.data);
+        try {
+            const [mitgliederRes, verzehrRes] = await Promise.all([
+                supabase.from('mitglieder').select('*'),
+                supabase.from('verzehr').select('*')
+            ]);
+            if (mitgliederRes.error || verzehrRes.error) {
+                throw new Error("Fehler beim Lesen Mitglieder/Verzehr:" + mitgliederRes.error + "," + verzehrRes.error);
             }
-            catch(error) {
-                console.log(error);
-            }
+            setMitglieder(mitgliederRes.data);
+            setVerzehr(verzehrRes.data);
         }
-        getData();
+        catch(error) {
+            console.log(error);
+        }
     };
 
     useEffect(() => {
         ladeDaten();
         setLoading(false);
-    }, [location.key]);
+    }, []);
     
      if (loading) return (<p>Lade Daten ...</p>);
     return (
