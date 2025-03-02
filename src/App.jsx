@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Mitglieder from "./components/Mitglieder";
 import Menu from "./components/Menu";
 import Home from "./components/Home";
-// import Mitglied from "./components/Mitglied";
+import Mitglied from "./components/Mitglied";
 // import AddMitglied from "./components/AddMitglied";
 // import AddKundenVerzehr from "./components/AddKundenVerzehr";
 // import AddVerzehr from "./components/AddVerzehr";
@@ -31,8 +31,8 @@ function App() {
                     <Route path="/updategetraenk/:id" element={<Getraenk />} />
                     <Route path="/addgetraenk" element={<Getraenk />} /> */}
                     <Route path="/mitglieder" element={<Mitglieder />} />
-                    {/* <Route path="/edit/:id" element={<Mitglied />} />
-                    <Route path="/addmitglied" element={<AddMitglied />} /> */}
+                    <Route path="/mitglied/:id" element={<Mitglied />} />
+                    <Route path="/addmitglied" element={<Mitglied />} />
                 </Routes>
             </div>
         </div>
