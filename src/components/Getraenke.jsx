@@ -6,7 +6,7 @@ import supabase from "../subabase";
 const Getraenke = () => {
     const [getraenke, setGetraenke] = useState([]);
     const [flatverzehr, setFlatverzehr] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
 
     const numberformat = new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     
@@ -52,7 +52,7 @@ const Getraenke = () => {
           
     useEffect(() => {
         ladeDaten();
-        setLoading(false);
+        // setLoading(false);
     }, []);
   
     if (loading) return <p>Daten werden geladen...</p>;
