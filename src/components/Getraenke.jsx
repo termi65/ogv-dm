@@ -55,7 +55,7 @@ const Getraenke = () => {
         // setLoading(false);
     }, []);
   
-    if (loading) return <p>Daten werden geladen...</p>;
+    // if (loading) return <p>Daten werden geladen...</p>;
   
     return (
       <div className="p-4">
