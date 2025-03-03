@@ -16,8 +16,8 @@ const Getraenke = () => {
         try {
             const [getraenkeRes, verzehrRes] = await Promise.all(
                 [
-                    supabase.from('getraenke').select('*'),
-                    supabase.from('verzehr').select('*')
+                    supabase.from('getraenke').select('*', { head: true }),
+                    supabase.from('verzehr').select('*', { head: true })
                 ]);
             if (getraenkeRes.error || verzehrRes.error) {
                 throw new Error(`Fehler beim Laden der Getränke (getraenke / verzehr) ${getraenkeRes.status} / ${verzehrRes.status} `);
