@@ -41,7 +41,7 @@ const Getraenke = () => {
                 console.error("Fehler beim Löschen:", error);
                 alert("Fehler beim Löschen des Getränks!");
             } else {
-                alert("Getränk erfolgreich gelöscht!");
+                // alert("Getränk erfolgreich gelöscht!");
                 ladeDaten();
             }
         } catch (err) {

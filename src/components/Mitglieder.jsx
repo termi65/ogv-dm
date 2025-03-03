@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import supabase from '../subabase';
 
 const Mitglieder = () => {
@@ -7,7 +7,7 @@ const Mitglieder = () => {
     const [verzehr, setVerzehr] = useState([]);
 
     const [loading, setLoading] = useState(true);
-    const location = useLocation();
+    const {refresh} = useParams(false);
 
     const deleteMitglied = async (id) => {
         try {

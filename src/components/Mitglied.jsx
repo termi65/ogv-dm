@@ -2,6 +2,9 @@ import React, {useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import supabase from "../subabase";
 
+
+// Ich muss Mitglieder.jsx mit dem refresh Parameter aufrufen, wenn sich hier was ändert!
+// Nachschauen, ob man mit navigate auch einen Parameter mitgeben kann!
 const Mitglied = () => {
     const { id } = useParams();
     const navigate = useNavigate();
