@@ -16,8 +16,8 @@ const Getraenke = () => {
         try {
             const [getraenkeRes, verzehrRes] = await Promise.all(
                 [
-                    supabase.from('getraenke').select('*', { head: true }),
-                    supabase.from('verzehr').select('*', { head: true })
+                    supabase.from('getraenke').select('*'),
+                    supabase.from('verzehr').select('*')
                 ]);
             if (getraenkeRes.error || verzehrRes.error) {
                 throw new Error(`Fehler beim Laden der Getränke (getraenke / verzehr) ${getraenkeRes.status} / ${verzehrRes.status} `);
@@ -55,7 +55,7 @@ const Getraenke = () => {
     useEffect(() => {
         ladeDaten();
         setLoading(false);
-    }, [params.toggleLoad]);
+    }, []);
   
     if (loading) return <p>Daten werden geladen...</p>;
   
@@ -84,7 +84,7 @@ const Getraenke = () => {
                         <td><strong>{getraenk.bezeichnung}</strong></td>
                         <td>{numberformat.format(getraenk.preis)} €</td>
                         <td>
-                            <Link to={`/updategetraenk/${getraenk.id}/${params.toggleLoad}`} className="ml-4 text-blue-500">
+                            <Link to={`/updategetraenk/${getraenk.id}`} className="ml-4 text-blue-500">
                                 <button className="btn bg-primary text-light">Bearbeiten</button>
                             </Link>
                         </td>

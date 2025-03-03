@@ -24,9 +24,9 @@ function App() {
                     {/* <Route path="/verzehr" element={<Verzehr />} />
                     <Route path="/addverzehr" element={<AddVerzehr />} />
                     <Route path="/addKundenverzehr/:mitglied_id" element={<AddKundenVerzehr />} /> */}
-                    <Route path="/updategetraenk/:id/:toggleLoad" element={<Getraenk />} />
-                    <Route path="/addgetraenk/:toggleLoad" element={<Getraenk />} />
-                    <Route path="/getraenke/:toggleLoad" element={<Getraenke/>} />
+                    <Route path="/updategetraenk/:id" element={<Getraenk />} />
+                    <Route path="/addgetraenk" element={<Getraenk />} />
+                    <Route path="/getraenke" element={<Getraenke/>} />
                     <Route path="/mitglieder/" element={<Mitglieder />} />
                     <Route path="/mitglied/:id" element={<Mitglied />} />
                     <Route path="/addmitglied" element={<Mitglied />} />

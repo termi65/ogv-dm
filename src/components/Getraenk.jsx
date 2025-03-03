@@ -20,7 +20,6 @@ export default function Getraenk() {
                 console.error("Fehler beim Laden:", error);
             }
         }
-        params.toggleLoad = !params.toggleLoad;
     }
 
     const insertData = async () => {
@@ -58,7 +57,7 @@ export default function Getraenk() {
         
         if (ID) updateData();
         else insertData(); 
-        navigate(`/getraenke/${params.toggleLoad}`); // Zurück zur Liste nach dem Speichern
+        navigate(`/getraenke`); // Zurück zur Liste nach dem Speichern
     };
     if (loading) return(<p>Lade Daten...</p>);
     
@@ -105,7 +104,7 @@ export default function Getraenk() {
                         </div>
                         <div className="col">
                             <div className="p-1">
-                                <button type="cancel" className="w-100 rounded bg-primary text-light" onClick={() => navigate(`/getraenke/${params.toggleLoad}`)}>
+                                <button type="cancel" className="w-100 rounded bg-primary text-light" onClick={() => navigate(`/getraenke`)}>
                                     Abbrechen
                                 </button>
                             </div>

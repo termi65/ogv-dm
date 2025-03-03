@@ -17,7 +17,7 @@ const Menu = () => {
                     <Nav className='me-auto'>
                         <Nav.Link as={Link} className='Link text-primary text-decoration-underline' onClick={() => setExpanded(false)} to='/'>Home</Nav.Link>
                         {/* <Nav.Link as={Link} className='Link text-primary text-decoration-underline' onClick={() => setExpanded(false)} to='/Verzehr'>Verzehr</Nav.Link> */}
-                        <Nav.Link as={Link} className='Link text-primary text-decoration-underline' onClick={() => setExpanded(false)} to='/Getraenke/false'>Getränke</Nav.Link>
+                        <Nav.Link as={Link} className='Link text-primary text-decoration-underline' onClick={() => setExpanded(false)} to='/Getraenke'>Getränke</Nav.Link>
                         <Nav.Link as={Link} className='Link text-primary text-decoration-underline' onClick={() => setExpanded(false)} to='/Mitglieder'>Mitglieder</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
