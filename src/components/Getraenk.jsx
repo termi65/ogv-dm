@@ -5,13 +5,13 @@ import supabase from "../subabase";
 export default function Getraenk() {
     const [drink, setDrink] = useState({ id: null, bezeichnung: "", preis: 0 });
     const [loading, setLoading] = useState(false);
-    const { id } = useParams();
     const navigate = useNavigate();
     
-    const ID = id ? Number(id) : undefined;
-
+    let params = useParams();
+    const ID = params.id ? Number(params.id) : undefined;
+    
     const ladeDaten = async () => {
-        if (id) {
+        if (ID) {
             try {
                 const getr = await supabase.from('getraenke').select('*').eq('id', ID);
                 setDrink(getr.data[0]);
@@ -20,6 +20,7 @@ export default function Getraenk() {
                 console.error("Fehler beim Laden:", error);
             }
         }
+        params.toggleLoad = !params.toggleLoad;
     }
 
     const insertData = async () => {
@@ -41,7 +42,7 @@ export default function Getraenk() {
     useEffect(() => {
         ladeDaten();
         setLoading(false);
-    }, [id]);
+    }, [ID]);
 
     const handleChange = (e) => {
         if (e.target.id === "preis") {
@@ -55,16 +56,16 @@ export default function Getraenk() {
         e.preventDefault();
         setLoading(true);
         
-        if (id) updateData();
+        if (ID) updateData();
         else insertData(); 
-        navigate("/getraenke"); // Zurück zur Liste nach dem Speichern
+        navigate(`/getraenke/${params.toggleLoad}`); // Zurück zur Liste nach dem Speichern
     };
     if (loading) return(<p>Lade Daten...</p>);
     
     return (
         <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 border rounded-lg shadow-md">
             <div className="container mt-4">
-                <h2 className="text-info bg-dark p-2 text-center">{id ? "Getränk aktualisieren" : "Neues Getränk hinzufügen"}</h2>
+                <h2 className="text-info bg-dark p-2 text-center">{ID ? "Getränk aktualisieren" : "Neues Getränk hinzufügen"}</h2>
                 <div className="mb-3">
                     <label htmlFor="bezeichnung" className="mb-1 bg-primary text-light w-100 p-2 rounded">
                         Bezeichnung:
@@ -98,13 +99,13 @@ export default function Getraenk() {
                         <div className="col">
                             <div className="p-1">
                                 <button type="submit" className="w-100 rounded bg-primary text-light" disabled={loading}>
-                                    {loading ? "Speichern..." : id ? "Speichern" : "Hinzufügen"}
+                                    {loading ? "Speichern..." : ID ? "Speichern" : "Hinzufügen"}
                                 </button>
                             </div>
                         </div>
                         <div className="col">
                             <div className="p-1">
-                                <button type="cancel" className="w-100 rounded bg-primary text-light" onClick={() => navigate("/getraenke")}>
+                                <button type="cancel" className="w-100 rounded bg-primary text-light" onClick={() => navigate(`/getraenke/${params.toggleLoad}`)}>
                                     Abbrechen
                                 </button>
                             </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import supabase from "../subabase";
 
@@ -7,6 +7,8 @@ const Getraenke = () => {
     const [getraenke, setGetraenke] = useState([]);
     const [flatverzehr, setFlatverzehr] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const params = useParams();
 
     const numberformat = new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     
@@ -53,7 +55,7 @@ const Getraenke = () => {
     useEffect(() => {
         ladeDaten();
         setLoading(false);
-    }, []);
+    }, [params.toggleLoad]);
   
     if (loading) return <p>Daten werden geladen...</p>;
   
@@ -82,7 +84,7 @@ const Getraenke = () => {
                         <td><strong>{getraenk.bezeichnung}</strong></td>
                         <td>{numberformat.format(getraenk.preis)} €</td>
                         <td>
-                            <Link to={`/updategetraenk/${getraenk.id}`} className="ml-4 text-blue-500">
+                            <Link to={`/updategetraenk/${getraenk.id}/${params.toggleLoad}`} className="ml-4 text-blue-500">
                                 <button className="btn bg-primary text-light">Bearbeiten</button>
                             </Link>
                         </td>
