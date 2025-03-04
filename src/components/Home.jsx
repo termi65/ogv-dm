@@ -1,16 +1,18 @@
 import React from "react";
-
+import {Link} from "react-router-dom";
 
 const Home = () => {
 
   return (
-    <div className="p-4">
-      <h1 className="text-info bg-dark p-2 text-center">Easy Drink v1.0</h1>
-      <p className="mx-4">
-        Hier kannst du für alle den Verzehr eintragen, wer wie viel getrunken hat und die Summe einsehen. 
-        <br />Achtung beim Bezahlen, werden alle Eintragungen <b>gelöscht</b>! Es kann nicht nachvollzogen werden, was die Person getrunken hat!
-      </p>
-    </div>
+        <div className="d-flex flex-column  align-items-center">
+            <h1>OGV-DM 🍺</h1>
+            <h2>Willkommen zum OGV-DM (Deckelmanager vom OGV)</h2>
+            <section>Mit dieser App kannst du schnell neue Mitglieder und Getränke anlegen und den Deckel jedes Mitglieds einsehen.</section>
+            <h3>ACHTUNG</h3>
+            <section>
+                Beim Bezahlen wird der 'Deckel' gelöscht! Er kann nicht wieder hergestellt werden. Aber keine Angst vor jedem Löschvorgang gibt's eine Sicherheitsabfrage!
+            </section>
+        </div>
   );
 }
 
