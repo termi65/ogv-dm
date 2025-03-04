@@ -1,40 +1,36 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Verzehr from "./components/Verzehr";
-import Getraenke from "./components/Getraenke";
+import { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Getraenk from "./components/Getraenk";
+import Getraenke from "./components/Getraenke";
 import Mitglieder from "./components/Mitglieder";
-import Menu from "./components/Menu";
+import Navigation from "./components/Navigation";
 import Home from "./components/Home";
-import Mitglied from "./components/Mitglied";
-// import AddMitglied from "./components/AddMitglied";
-// import AddKundenVerzehr from "./components/AddKundenVerzehr";
-// import AddVerzehr from "./components/AddVerzehr";
 
-import './App.css'
+import supabase from "./subabase";
 
-function App() {
+export default function App() {
+  const [drinks, setDrinks] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchDrinks();
+  }, []);
+
+  async function fetchDrinks() {
+    const { data, error } = await supabase.from("getraenke").select("*");
+    if (!error) setDrinks(data);
+  }
+
   return (
-    <Router basename="/">
-        <div>
-            <Menu />
-            <div className="content">
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    {/* <Route path="/verzehr" element={<Verzehr />} />
-                    <Route path="/addverzehr" element={<AddVerzehr />} />
-                    <Route path="/addKundenverzehr/:mitglied_id" element={<AddKundenVerzehr />} /> */}
-                    <Route path="/updategetraenk/:id" element={<Getraenk />} />
-                    <Route path="/addgetraenk" element={<Getraenk />} />
-                    <Route path="/getraenke" element={<Getraenke/>} />
-                    <Route path="/mitglieder" element={<Mitglieder />} />
-                    <Route path="/mitglied/:id" element={<Mitglied />} />
-                    <Route path="/addmitglied" element={<Mitglied />} />
-                </Routes>
-            </div>
-        </div>
-    </Router>
-  )
+    <div>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/getraenke" element={<Getraenke drinks={drinks} onEdit={(drink) => navigate(`/edit/${drink.id}`)} onRefresh={fetchDrinks} />} />
+        <Route path="/edit/:id" element={<Getraenk onSave={() => { fetchDrinks(); navigate("/getraenke"); }} />} />
+        <Route path="/mitglieder" element={<Mitglieder />} />
+      </Routes>
+    </div>
+  );
 }
-
-export default App
