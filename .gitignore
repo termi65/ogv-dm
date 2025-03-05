@@ -11,6 +11,8 @@
 # production
 /build
 
+/dev-dist/sw.js
+
 help.md
 # misc
 .DS_Store

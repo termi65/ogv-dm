@@ -5,12 +5,11 @@ import supabase from "../subabase";
 
 // Ich muss Mitglieder.jsx mit dem refresh Parameter aufrufen, wenn sich hier was ändert!
 // Nachschauen, ob man mit navigate auch einen Parameter mitgeben kann!
-const Mitglied = () => {
+const Mitglied = ({onSave}) => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
     
-    const [mitglied, setMitglied] = useState({id:0, name:'', vorname:''});
+    const [mitglied, setMitglied] = useState({name:'', vorname:''});
     const ID = id ? Number(id) : 0;
 
     const ladeMitglied = async () => {
@@ -44,45 +43,37 @@ const Mitglied = () => {
     useEffect(() => {
         if (id) ladeMitglied();
         console.log(mitglied);
-        setLoading(false);
-        }, [id]);
+        }, []);
 
-    const handleChange = (e) => {
-        setMitglied({ ...mitglied, [e.target.id]: e.target.value });
-        
-        };
-    
-        // 3. Änderungen an den Server senden
-    const handleSubmit = (e) => {
+    // 3. Änderungen an den Server senden
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!id) insertMitglied();
-        else updateMitglied();
-        navigate('/mitglieder');
+        if (!id) await insertMitglied();
+        else await updateMitglied();
+        onSave();
         };
     
-    if (loading) return <p>Lädt...</p>;
-
     return (
         <div className="container mt-4">
         <h2 className="text-info bg-dark p-2 text-center">Mitglied bearbeiten</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="mb-3">
                 <label htmlFor="name" className="mb-1 w-100 p-1 bg-primary text-light rounded">
                     Name
                 </label>
-                <input type="text" className="form-control border border-primary" id="name" value={mitglied.name} onChange={handleChange} />
+                <input type="text" className="form-control border border-primary" id="name" value={mitglied.name} onChange={(e) => setMitglied({ ...mitglied, name: e.target.value })}/>
             </div>
             <div className="mb-3">
-            <label htmlFor="vorname" className="mb-1 w-100 p-1 bg-primary text-light rounded">
-                Vorname
-            </label>
-            <input type="text" className="form-control border border-primary" id="vorname" value={mitglied.vorname} onChange={handleChange} />
+                <label htmlFor="vorname" className="mb-1 w-100 p-1 bg-primary text-light rounded">
+                    Vorname
+                </label>
+                <input type="text" className="form-control border border-primary" id="vorname" value={mitglied.vorname} onChange={(e) => setMitglied({ ...mitglied, vorname: e.target.value })}/>
             </div>
             <div className="container text-center">
                 <div className="row gx-1">
                     <div className="col">
                         <div className="p-1">
-                            <button type="submit" className="w-100 rounded btn btn-primary" onClick={handleSubmit}>
+                            <button type="submit" className="w-100 rounded btn btn-primary">
                                 Speichern
                             </button>
                         </div>

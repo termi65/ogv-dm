@@ -1,101 +1,84 @@
-import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { useEffect } from "react";
+import useScreenSize from "../utils/useScreenSize";
 
-import supabase from "../subabase";
-
-const Getraenke = () => {
-    const [getraenke, setGetraenke] = useState([]);
-    const [flatverzehr, setFlatverzehr] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    const numberformat = new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    
-    const ladeDaten = async () => {
-        try {
-            const [getraenkeRes, verzehrRes] = await Promise.all(
-                [
-                    supabase.from('getraenke').select('*'),
-                    supabase.from('verzehr').select('*')
-                ]);
-            if (getraenkeRes.error || verzehrRes.error) {
-                throw new Error(`Fehler beim Laden der Getränke (getraenke / verzehr) ${getraenkeRes.status} / ${verzehrRes.status} `);
-            }
-            setGetraenke(getraenkeRes.data); 
-            setFlatverzehr(verzehrRes.data); 
-        } catch(error) {
-            console.error("Fehler beim Laden der Daten:", error);
-        };
-    }
-
-    const deleteGetränk = async (id) => {
-        const index = flatverzehr.findIndex((f) => f.getraenke_id === id);
-        if (index !== -1) {
-            window.alert("Getränk wird im Verzehr verwendet und kann somit nicht gelöscht werden!");
-            return;
-        }
-
-        if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === false) return;
-        try {
-            const { error } = await supabase.from('getraenke').delete().eq('id', id);
-            if (error) {
-                console.error("Fehler beim Löschen:", error);
-                alert("Fehler beim Löschen des Getränks!");
-            } else {
-                // alert("Getränk erfolgreich gelöscht!");
-                ladeDaten();
-            }
-        } catch (err) {
-            console.error("Unerwarteter Fehler:", err);
-            alert("Unerwarteter Fehler beim Löschen!");
-        }
-    }
-          
-    useEffect(() => {
-        ladeDaten();
-        setLoading(false);
-    }, []);
-  
-    if (loading) return <p>Daten werden geladen...</p>;
-  
+const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
+    const screenSize = useScreenSize();
     return (
-      <div className="p-4">
-        <h2 className="text-info bg-dark p-2 text-center">
-            Getränkeliste 
-            <Link className='Link' to={`/addgetraenk`}>
-                <button type="button" className="btn btn-primary">
-                    +
-                </button>
-            </Link>
-        </h2>
+      <div className="container mt-4">
+        <h1 className="text-info bg-dark p-2 text-center">Getränkeliste <button type="button" onClick={() => onAdd()} className="btn btn-primary">+</button></h1>
+        <button className="btn btn-success btn-sm" onClick={onRefresh}>
+          🔄 Aktualisieren
+        </button>
+        <p>Bildschirmgröße: {screenSize}</p>
         <table className="table table-bordered mt-2 border-primary p-1">
             <thead>
                 <tr>
                     <th>Bezeichnung</th>
-                    <th>Preis</th>
-                    <th></th>
-                    <th></th>
+                    <th>Preis (€)</th>
+                    {screenSize ==="sm" || screenSize ==="xs" ? 
+                        <th>
+                            <i className="bi bi-pencil-square"></i>
+                        </th> 
+                        :
+                        <th>Bearbeiten</th>
+                    }
+                    {screenSize ==="sm" || screenSize ==="xs" ? 
+                        <th>
+                            <i class="bi bi-x-square"></i>
+                        </th>
+                        :
+                        <th>Löschen</th>
+                    }
+                    
                 </tr>
             </thead>
             <tbody>
-                {getraenke.map((getraenk) => (
-                    <tr key={getraenk.id}>
-                        <td><strong>{getraenk.bezeichnung}</strong></td>
-                        <td>{numberformat.format(getraenk.preis)} €</td>
+            {getraenke.map((drink) => (
+                <tr key={drink.id}>
+                    <td>{drink.bezeichnung}</td>
+                    <td>{drink.preis}</td>
+                    {screenSize ==="sm" || screenSize ==="xs" ? 
                         <td>
-                            <Link to={`/updategetraenk/${getraenk.id}`} className="ml-4 text-blue-500">
-                                <button className="btn bg-primary text-light">Bearbeiten</button>
-                            </Link>
-                        </td>
-                        <td className="text-center">
-                            <button className="btn bg-primary text-light" onClick={() => deleteGetränk(getraenk.id)}>
-                                Löschen
+                            <button type="button" className="btn bg-primary text-light"
+                                onClick={() => onEdit(drink)}
+                            >
+                                <i className="bi bi-pencil-square"></i>
+                            </button>
+                        </td> 
+                        :
+                         <td>
+                            <button type="button" className="btn bg-primary text-light"
+                                onClick={() => onEdit(drink)}
+                            >
+                                Bearbeiten
                             </button>
                         </td>
-                    </tr>))}
+                    }
+                    {screenSize ==="sm" || screenSize ==="xs" ? 
+                        <td>
+                            <button type="button" className="btn bg-danger text-light"
+                                onClick={() => onDelete(drink.id)}
+                            >
+                                <i class="bi bi-x-square"></i>
+                            </button>
+                            
+                        </td>
+                        :
+                        <td>
+                        <button type="button" className="btn bg-danger text-light"
+                            onClick={() => onDelete(drink.id)}
+                        >
+                            Löschen
+                        </button>
+                    </td>
+                    }
+
+                </tr>
+            ))}
             </tbody>
         </table>
       </div>
     );
-  };
+}
 
-  export default Getraenke;
+export default Getraenke
