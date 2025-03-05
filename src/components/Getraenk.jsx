@@ -28,15 +28,19 @@ export default function Getraenk({onSave}) {
   }
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h2 className="text-lg font-bold">Getränk bearbeiten</h2>
+    <div className="">
+      <h2 className="">Getränk bearbeiten</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={formData.bezeichnung}
-          onChange={(e) => setFormData({ ...formData, bezeichnung: e.target.value })}
-          className="border p-1 w-full"
-        />
+        <div className="input-group">
+            <label htmlFor="bezeichnung">Bezeichnung:</label>
+            <input
+                type="text"
+                id="bezeichnung"
+                value={formData.bezeichnung}
+                onChange={(e) => setFormData({ ...formData, bezeichnung: e.target.value })}
+                className="border p-1 w-full"
+            />
+        </div>
         <input
           type="number"
           value={formData.preis}
