@@ -8,7 +8,7 @@ export default function Getraenk({onSave}) {
   const [formData, setFormData] = useState({ bezeichnung: "", preis: "" });
 
   useEffect(() => {
-    fetchDrink();
+    if (id) fetchDrink();
   }, []);
 
   async function fetchDrink() {
@@ -18,10 +18,18 @@ export default function Getraenk({onSave}) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const { error } = await supabase
-      .from("getraenke")
-      .update({ bezeichnung: formData.bezeichnung, preis: formData.preis })
-      .eq("id", id);
+    let error;
+    if (id) {
+        error = await supabase
+        .from("getraenke")
+        .update({ bezeichnung: formData.bezeichnung, preis: formData.preis })
+        .eq("id", id);
+        }
+    else {
+        error = await supabase
+        .from("getraenke")
+        .insert({ bezeichnung: formData.bezeichnung, preis: formData.preis });
+    }
     if (!error) {
       onSave();
     }
@@ -29,7 +37,7 @@ export default function Getraenk({onSave}) {
 
   return (
     <div className="">
-      <h2 className="">Getränk bearbeiten</h2>
+      <h2 className="">{id ? 'Getränk bearbeiten' : 'Einfügen'}</h2>
       <form onSubmit={handleSubmit}>
         <div className="input-group">
             <label htmlFor="bezeichnung">Bezeichnung:</label>

@@ -1,7 +1,7 @@
-const Getraenke = ({ drinks, onEdit, onRefresh, onDelete }) => {
+const Getraenke = ({ drinks, onEdit, onRefresh, onDelete, onAdd }) => {
     return (
       <div className="p-4 max-w-md mx-auto">
-        <h1 className="text-xl font-bold">Getränkeliste</h1>
+        <h1 className="text-xl font-bold">Getränkeliste <button type="button" onClick={() => onAdd()} className="btn btn-primary">+</button></h1>
         <button className="btn btn-success btn-sm" onClick={onRefresh}>
           🔄 Aktualisieren
         </button>
