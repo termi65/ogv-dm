@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import useScreenSize from "../utils/useScreenSize";
 
 const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
@@ -24,7 +23,7 @@ const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
                     }
                     {screenSize ==="sm" || screenSize ==="xs" ? 
                         <th>
-                            <i class="bi bi-x-square"></i>
+                            <i className="bi bi-x-square"></i>
                         </th>
                         :
                         <th>Löschen</th>
@@ -40,16 +39,14 @@ const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
                     {screenSize ==="sm" || screenSize ==="xs" ? 
                         <td>
                             <button type="button" className="btn bg-primary text-light"
-                                onClick={() => onEdit(drink)}
-                            >
+                                onClick={() => onEdit(drink)}>
                                 <i className="bi bi-pencil-square"></i>
                             </button>
                         </td> 
                         :
                          <td>
                             <button type="button" className="btn bg-primary text-light"
-                                onClick={() => onEdit(drink)}
-                            >
+                                onClick={() => onEdit(drink)}>
                                 Bearbeiten
                             </button>
                         </td>
@@ -57,17 +54,15 @@ const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
                     {screenSize ==="sm" || screenSize ==="xs" ? 
                         <td>
                             <button type="button" className="btn bg-danger text-light"
-                                onClick={() => onDelete(drink.id)}
-                            >
-                                <i class="bi bi-x-square"></i>
+                                onClick={() => onDelete(drink.id)}>
+                                <i className="bi bi-x-square"></i>
                             </button>
                             
                         </td>
                         :
                         <td>
                         <button type="button" className="btn bg-danger text-light"
-                            onClick={() => onDelete(drink.id)}
-                        >
+                            onClick={() => onDelete(drink.id)}>
                             Löschen
                         </button>
                     </td>

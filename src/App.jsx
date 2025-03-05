@@ -59,7 +59,7 @@ export default function App() {
 
     const deleteMitglied = async (id) => {
         try {
-            const index = verzehr.findIndex((v) => v.mitglied_id === id);
+            const index = flatverzehr.findIndex((v) => v.mitglied_id === id);
             if (index !== -1) {
                 window.alert("Mitglied kann nicht gelöscht werden, da es noch zu bezahlen hat.");
                 return;
