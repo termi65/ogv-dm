@@ -1,38 +1,78 @@
-const Getraenke = ({ drinks, onEdit, onRefresh, onDelete, onAdd }) => {
+import { useEffect } from "react";
+import useScreenSize from "../utils/useScreenSize";
+
+const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
+    const screenSize = useScreenSize();
     return (
-      <div className="p-4 max-w-md mx-auto">
-        <h1 className="text-xl font-bold">Getränkeliste <button type="button" onClick={() => onAdd()} className="btn btn-primary">+</button></h1>
+      <div className="container mt-4">
+        <h1 className="text-info bg-dark p-2 text-center">Getränkeliste <button type="button" onClick={() => onAdd()} className="btn btn-primary">+</button></h1>
         <button className="btn btn-success btn-sm" onClick={onRefresh}>
           🔄 Aktualisieren
         </button>
-        <table className="table table-success table-striped">
+        <p>Bildschirmgröße: {screenSize}</p>
+        <table className="table table-bordered mt-2 border-primary p-1">
             <thead>
                 <tr>
                     <th>Bezeichnung</th>
                     <th>Preis (€)</th>
-                    <th>Bearbeiten</th>
-                    <th>Löschen</th>
+                    {screenSize ==="sm" || screenSize ==="xs" ? 
+                        <th>
+                            <i className="bi bi-pencil-square"></i>
+                        </th> 
+                        :
+                        <th>Bearbeiten</th>
+                    }
+                    {screenSize ==="sm" || screenSize ==="xs" ? 
+                        <th>
+                            <i class="bi bi-x-square"></i>
+                        </th>
+                        :
+                        <th>Löschen</th>
+                    }
+                    
                 </tr>
             </thead>
             <tbody>
-            {drinks.map((drink) => (
+            {getraenke.map((drink) => (
                 <tr key={drink.id}>
                     <td>{drink.bezeichnung}</td>
                     <td>{drink.preis}</td>
-                    <td>
-                        <button type="button" className="btn btn-success btn-sm"
-                            onClick={() => onEdit(drink)}
-                        >
-                            Bearbeiten
-                        </button>
-                    </td>
-                    <td>
-                        <button type="button" className="btn btn-success btn-sm"
+                    {screenSize ==="sm" || screenSize ==="xs" ? 
+                        <td>
+                            <button type="button" className="btn bg-primary text-light"
+                                onClick={() => onEdit(drink)}
+                            >
+                                <i className="bi bi-pencil-square"></i>
+                            </button>
+                        </td> 
+                        :
+                         <td>
+                            <button type="button" className="btn bg-primary text-light"
+                                onClick={() => onEdit(drink)}
+                            >
+                                Bearbeiten
+                            </button>
+                        </td>
+                    }
+                    {screenSize ==="sm" || screenSize ==="xs" ? 
+                        <td>
+                            <button type="button" className="btn bg-danger text-light"
+                                onClick={() => onDelete(drink.id)}
+                            >
+                                <i class="bi bi-x-square"></i>
+                            </button>
+                            
+                        </td>
+                        :
+                        <td>
+                        <button type="button" className="btn bg-danger text-light"
                             onClick={() => onDelete(drink.id)}
                         >
                             Löschen
                         </button>
                     </td>
+                    }
+
                 </tr>
             ))}
             </tbody>
