@@ -21,14 +21,14 @@ export default function App() {
         if (!error) setDrinks(data);
     }
     
-    async function addDrink({drink}) {
-        try {
-            await supabase.from('getraenke').insert({drink});
-        } catch (error) {
-            console.log("Fehler beim Einfügen Getränk:" + Error);
-        }
-        fetchDrinks();
-    }
+    // async function addDrink({drink}) {
+    //     try {
+    //         await supabase.from('getraenke').insert({drink});
+    //     } catch (error) {
+    //         console.log("Fehler beim Einfügen Getränk:" + Error);
+    //     }
+    //     fetchDrinks();
+    // }
     async function deleteDrink(id) {
         try {
             await supabase.from("getraenke").delete().eq('id',id);
@@ -47,9 +47,10 @@ export default function App() {
                 onEdit={(drink) => navigate(`/getraenk/${drink.id}`)} 
                 onRefresh={fetchDrinks} 
                 onDelete={(drinkId) => deleteDrink(drinkId)} 
-                onAdd = {() => navigate(`/getraenk`)} />} 
+                onAdd = {() => navigate(`/addgetraenk`)} />} 
                 />
             <Route path="/getraenk/:id" element={<Getraenk onSave={() => { fetchDrinks(); navigate("/getraenke"); }} />} />
+            <Route path="/addgetraenk" element={<Getraenk onSave={() => { fetchDrinks(); navigate("/getraenke");}} />} />
             <Route path="/mitglieder" element={<Mitglieder />} />
         </Routes>
         </div>

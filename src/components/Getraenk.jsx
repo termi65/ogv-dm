@@ -30,7 +30,7 @@ export default function Getraenk({onSave}) {
         .from("getraenke")
         .insert({ bezeichnung: formData.bezeichnung, preis: formData.preis });
     }
-    if (!error) {
+    if (!error.error) {
       onSave();
     }
   }
