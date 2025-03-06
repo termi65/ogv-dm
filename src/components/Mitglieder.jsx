@@ -4,7 +4,6 @@ const Mitglieder = ({ mitglieder, onEdit, onRefresh, onDelete, onAdd }) => {
     return (
         <div className="container mt-4">
             <h2 className="text-info bg-dark p-2 text-center">Mitgliederliste <button type="button" className="btn btn-primary"  onClick={() => onAdd()}>+</button></h2>
-            <h2>Mitglieder</h2>
             <button className="btn btn-success btn-sm" onClick={onRefresh}>
                 🔄 Aktualisieren
             </button>
@@ -46,7 +45,7 @@ const Mitglieder = ({ mitglieder, onEdit, onRefresh, onDelete, onAdd }) => {
                         {screenSize ==="sm" || screenSize ==="xs" ? 
                             <td><button type="button" className="btn bg-danger text-light" onClick={() => onDelete(m.id)}><i className="bi bi-x-square"></i></button></td>
                             :
-                            <td><button type="button" className="btn bg-danger" onClick={() => onDelete(m.id)}>Löschen</button></td>
+                            <td><button type="button" className="btn bg-danger text-light" onClick={() => onDelete(m.id)}>Löschen</button></td>
                         }
                     </tr>
                 ))}

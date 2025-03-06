@@ -10,14 +10,11 @@ import Home from "./components/Home";
 import supabase from "./subabase";
 
 export default function App() {
-    // const [drinks, setDrinks] = useState([]);
     const navigate = useNavigate();
     const [getraenke, setGetraenke] = useState([]);
     const [mitglieder, setMitglieder] = useState([]);
     const [flatverzehr, setFlatverzehr] = useState([]);
 
-    // const numberformat = new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    
     const ladeDaten = async () => {
         try {
             const [mitgliederRes, getraenkeRes, verzehrRes] = await Promise.all(
