@@ -6,29 +6,39 @@ import Mitglieder from "./components/Mitglieder";
 import Mitglied from "./components/Mitglied";
 import Navigation from "./components/Navigation";
 import Home from "./components/Home";
+import Verzehrliste from "./components/Verzehrliste";
 
 import supabase from "./subabase";
+import Verzehr from "./components/Verzehr";
 
 export default function App() {
     const navigate = useNavigate();
     const [getraenke, setGetraenke] = useState([]);
     const [mitglieder, setMitglieder] = useState([]);
     const [flatverzehr, setFlatverzehr] = useState([]);
+    const [verzehr, setVerzehr] = useState([]);
 
     const ladeDaten = async () => {
         try {
-            const [mitgliederRes, getraenkeRes, verzehrRes] = await Promise.all(
+            const [mitgliederRes, getraenkeRes, flatverzehrRes, verzehrRes] = await Promise.all(
                 [
                     supabase.from('mitglieder').select('*').order('name', { ascending: true }),
                     supabase.from('getraenke').select('*').order('bezeichnung', { ascending: true }),
-                    supabase.from('verzehr').select('*').order('id', { ascending: true })
+                    supabase.from('verzehr').select('*').order('id', { ascending: true }),
+                    supabase.from('verzehr').select(`
+                        id,
+                        anzahl,
+                        mitglied_id,
+                        mitglieder (id, name, vorname),
+                        getraenke (id, bezeichnung, preis)`)
                 ]);
-            if (mitgliederRes.error || getraenkeRes.error || verzehrRes.error) {
-                throw new Error(`Fehler beim Laden der Getränke (getraenke / verzehr) ${getraenkeRes.status} / ${verzehrRes.status} `);
+            if (mitgliederRes.error || getraenkeRes.error || flatverzehrRes.error || verzehrRes.error) {
+                throw new Error(`Fehler beim Laden der Getränke (getraenke / verzehr / flatverzehr / mitglieder) ${getraenkeRes.status} / ${verzehrRes.status} /${flatverzehrRes.status} / ${mitgliederRes.status} /  `);
             }
             setMitglieder(mitgliederRes.data);
             setGetraenke(getraenkeRes.data); 
-            setFlatverzehr(verzehrRes.data); 
+            setFlatverzehr(flatverzehrRes.data); 
+            setVerzehr(verzehrRes.data); 
         } catch(error) {
             console.error("Fehler beim Laden der Daten:", error);
         };
@@ -75,6 +85,23 @@ export default function App() {
         }
         ladeDaten();
     }
+    
+    // ---------- VERZEHR (Deckelmanagement) -----------------
+    const deleteVerzehr = async (id) => {
+        try {
+            if (window.confirm("Achtung! Der Deckel wird jetzt weggeworfen und kann nicht wieder hergestellt werden. Trotzdem weiter?") === false) return;
+
+            const response = await supabase
+                .from('verzehr')
+                .delete()
+                .eq('id', id)
+            console.log(response);
+        }
+        catch (error) {
+            console.log(error);
+        }
+        ladeDaten();
+    }
 
     useEffect(() => {
         ladeDaten();
@@ -105,6 +132,27 @@ export default function App() {
             />
             <Route path="/mitglied/:id" element={<Mitglied onSave={() => {ladeDaten(); navigate("/mitglieder");}} />} />
             <Route path="/addmitglied" element={<Mitglied onSave={() => {ladeDaten(); navigate("/mitglieder");}} />} />
+            
+            {/* -------------- Verzehr -------------- */}
+            <Route path="/verzehrliste" element={<Verzehrliste 
+                verzehrliste={verzehr} 
+                mitglieder={mitglieder}
+                getraenke={getraenke}
+                onEdit={(verzehr) => navigate(`verzehr/${verzehr.id}`)}
+                onRefresh={ladeDaten}
+                onDelete={(id) => deleteVerzehr(id)}
+                onAdd={() => navigate(`/addverzehr`)}
+                />} 
+            />
+            <Route path="/verzehr/:id" element={<Verzehr 
+                onSave={() => {ladeDaten(); navigate("/verzehrliste");}} 
+                />}
+            />
+            <Route path="/addverzehr" element={<Verzehr 
+                verzehrliste={verzehr} 
+                mitglieder={mitglieder}
+                getraenke={getraenke}
+                onSave={() => {ladeDaten(); navigate("/verzehrliste");}} />} />
 
         </Routes>
         </div>
