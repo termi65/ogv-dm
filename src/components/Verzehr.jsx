@@ -5,62 +5,116 @@ import supabase from "../subabase";
 const Verzehr = () => {
     const {id} = useParams();
     const [mitglied, setMitglied] = useState({name:'', vorname:''});
-    const [currGetraenke, setCurrGetraenke] = useState([]);
-    const [getraenke, setGetraenke] = useState([]);
+    const [mitglieder, setMitglieder] = useState([]);
+    const [selectedMitglied, setSelectedMitglied] = useState({id: 0, name:'', vorname:''});
+    
+    const [availableGetraenke, setAvailableGetraenke] = useState([]);
+    const [selectedGetraenk, setSelectedGetraenk] = useState([]);
     const [currVerzehrliste, setCurrVerzehrliste] = useState([]);
 
-    const setValues = async () => {
+    const numberformat= new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    const setValuesWithId = async () => {
+
             try {
-                const [mitgliedRes, getraenkeRes, flatverzehrRes] = await Promise.all(
+                const [mitgliedRes, flatverzehrRes] = await Promise.all(
                     [
                         supabase.from('mitglieder').select('*').eq('id', id).single(),
-                        supabase.from('getraenke').select('*'),
-                        supabase.from('verzehr').select('*').eq('mitglied_id', id),
+                        supabase.from('verzehr').select('getraenk_id').eq('mitglied_id', id),
+                        
                     ]);
-                if (mitgliedRes.error || getraenkeRes.error || flatverzehrRes.error ) {
-                    throw new Error(`Fehler beim Laden der Getränke (getraenke / verzehr / flatverzehr / mitglieder) ${getraenkeRes.status} / ${flatverzehrRes.status} / ${mitgliedRes.status} /  `);
+                if (mitgliedRes.error || flatverzehrRes.error ) {
+                    throw new Error(`Fehler beim Laden der Getränke (mitglieder / verzehr ) ${mitgliedRes.status} / ${flatverzehrRes.status}`);
                 }
+                
                 setMitglied(mitgliedRes.data);
-                setCurrVerzehrliste(flatverzehrRes.data); 
-                setGetraenke(getraenkeRes.data); 
-
-                const filteredGetraenke = getraenkeRes.data.filter(getraenk => flatverzehrRes.data.some(v => v.getraenke_id === getraenk.id));
-                setCurrGetraenke(filteredGetraenke);
+                const konsumierteIds = flatverzehrRes.data.map(row => row.getraenk_id);
+                const {data, error:error1} = await supabase.from('getraenke').select('*').not('id', 'in', konsumierteIds);
+                // const {data, error:error1} = await supabase.from('getraenke').select('*').not('id', 'in', `(${konsumierteIds})`);
+                if (error1) console.log(error1);
+                setAvailableGetraenke(data); 
             } catch(error) {
                 console.error("Fehler beim Laden der Daten:", error);
             };
         }
-        // let { data, error } = await supabase.from('verzehr').select('*').eq('mitglied_id', Number(id));
-        // if (!error1) setCurrVerzehrliste(vz);
 
-        // { mtgl, error2 } = await supabase.from("mitglieder").select("*").eq("id", vz[0].mitglied_id).single();
-        // if (!error2)
-        //     setMitglied(mtgl);
+        const setValues = async () => {
+            try {
+                const [mitgliedRes, getraenkeRes, flatverzehrRes] = await Promise.all(
+                    [
+                        supabase.from('mitglieder').select('*'),
+                        supabase.from('getraenke').select('*'),
+                        supabase.from('verzehr').select('*'), // ??? brauch ich die ???
+                    ]);
+                if (mitgliedRes.error || getraenkeRes.error || flatverzehrRes.error ) {
+                    throw new Error(`Fehler beim Laden der Getränke (getraenke / verzehr / flatverzehr / mitglieder) ${getraenkeRes.status} / ${flatverzehrRes.status} / ${mitgliedRes.status} /  `);
+                }
+                setMitglieder(mitgliedRes.data);
+                setCurrVerzehrliste(flatverzehrRes.data); 
+                setAvailableGetraenke(getraenkeRes.data); 
 
-        // const { getr, error3 } = await supabase.from("getraenke").select("*");
-        // if (error1 || error2 || error3) {
-        //     alert("Fehler:" + error1  + "/" + error2 + "/" + error3);
-        //     return;
-        // }
+                // const filteredGetraenke = getraenkeRes.data.filter(getraenk => flatverzehrRes.data.some(v => v.getraenke_id === getraenk.id));
+                // setAvailableGetraenke(filteredGetraenke);
+            } catch(error) {
+                console.error("Fehler beim Laden der Daten:", error);
+            };
+        }
 
-        // const filteredGetraenke = getr.filter((getraenk) => !filteredVerzehr.some(v => v.getraenke_id === getraenk.id));
-        // setCurrGetraenke(filteredGetraenke);
-    // }
-    
     useEffect(() => {
-        setValues();
-        console.log(currGetraenke);
+        if (id) setValuesWithId();
+        else setValues();
+        
     }, []);
 
     return(
         <div>
             {id ? <h3>Edit {mitglied.name}</h3> : <h3>Neuer Deckel</h3>}
-            <div>
-                <ul>{currGetraenke.map((m) => {
-                    <li>m.bezeichnung, m.preis</li>
-                })}
-                </ul>
-            </div>
+            {id ? 
+                <div>
+                    <p><select
+                            className="form-select bg-secondary"
+                            value={selectedGetraenk}
+                            onChange={(e) => setSelectedGetraenk(e.target.value)}
+                        >
+                            <option value="">Getränk auswählen</option>
+                            {availableGetraenke.map((g) => (
+                                <option className="bg-info" key={g.id} value={g.id}>
+                                    {g.bezeichnung} {numberformat.format(g.preis)} €
+                                </option>
+                            ))}
+                        </select>
+                    </p>
+                </div>
+                :
+                <div>
+                    <p><select
+                            className="form-select bg-secondary"
+                            value={selectedMitglied}
+                            onChange={(e) => setSelectedMitglied(e.target.value)}
+                        >
+                            <option value="">Mitglied auswählen</option>
+                            {mitglieder.map((m) => (
+                                <option className="bg-info" key={m.id} value={m.id}>
+                                    {m.name} {m.vorname}
+                                </option>
+                            ))}
+                        </select>
+                    </p>
+                    <p><select
+                            className="form-select bg-secondary"
+                            value={selectedGetraenk}
+                            onChange={(e) => setSelectedGetraenk(e.target.value)}
+                        >
+                            <option value="">Getränk auswählen</option>
+                            {availableGetraenke.map((g) => (
+                                <option className="bg-info" key={g.id} value={g.id}>
+                                    {g.bezeichnung} {numberformat.format(g.preis)} €
+                                </option>
+                            ))}
+                        </select>
+                    </p>
+                </div>
+            }
 
         </div>
     );
