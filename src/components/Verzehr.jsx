@@ -21,7 +21,6 @@ const Verzehr = () => {
                     [
                         supabase.from('mitglieder').select('*').eq('id', id).single(),
                         supabase.from('verzehr').select('getraenk_id').eq('mitglied_id', id),
-                        
                     ]);
                 if (mitgliedRes.error || flatverzehrRes.error ) {
                     throw new Error(`Fehler beim Laden der Getränke (mitglieder / verzehr ) ${mitgliedRes.status} / ${flatverzehrRes.status}`);
@@ -29,8 +28,7 @@ const Verzehr = () => {
                 
                 setMitglied(mitgliedRes.data);
                 const konsumierteIds = flatverzehrRes.data.map(row => row.getraenk_id);
-                const {data, error:error1} = await supabase.from('getraenke').select('*').not('id', 'in', konsumierteIds);
-                // const {data, error:error1} = await supabase.from('getraenke').select('*').not('id', 'in', `(${konsumierteIds})`);
+                const {data, error:error1} = await supabase.from('getraenke').select('*').not('id', 'in', `(${konsumierteIds})`);
                 if (error1) console.log(error1);
                 setAvailableGetraenke(data); 
             } catch(error) {
@@ -40,16 +38,18 @@ const Verzehr = () => {
 
         const setValues = async () => {
             try {
-                const [mitgliedRes, getraenkeRes, flatverzehrRes] = await Promise.all(
+                const [getraenkeRes, flatverzehrRes] = await Promise.all(
                     [
-                        supabase.from('mitglieder').select('*'),
                         supabase.from('getraenke').select('*'),
-                        supabase.from('verzehr').select('*'), // ??? brauch ich die ???
+                        supabase.from('verzehr').select('mitglied_id'),
                     ]);
-                if (mitgliedRes.error || getraenkeRes.error || flatverzehrRes.error ) {
-                    throw new Error(`Fehler beim Laden der Getränke (getraenke / verzehr / flatverzehr / mitglieder) ${getraenkeRes.status} / ${flatverzehrRes.status} / ${mitgliedRes.status} /  `);
+                if (getraenkeRes.error || flatverzehrRes.error ) {
+                    throw new Error(`Fehler beim Laden der Getränke (getraenke / flatverzehr) ${getraenkeRes.status} / ${flatverzehrRes.status}`);
                 }
-                setMitglieder(mitgliedRes.data);
+                const bereitsAngelegteMitglieder = flatverzehrRes.data.map(row => row.mitglied_id);
+                const {data, error:error1} = await supabase.from('mitglieder').select('*').not('id', 'in', `(${bereitsAngelegteMitglieder})`);
+                if (error1) console.log(error1);
+                setMitglieder(data);
                 setCurrVerzehrliste(flatverzehrRes.data); 
                 setAvailableGetraenke(getraenkeRes.data); 
 
