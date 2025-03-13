@@ -149,9 +149,6 @@ export default function App() {
                 />}
             />
             <Route path="/addverzehr" element={<Verzehr 
-                verzehrliste={verzehr} 
-                mitglieder={mitglieder}
-                getraenke={getraenke}
                 onSave={() => {ladeDaten(); navigate("/verzehrliste");}} />} />
 
         </Routes>

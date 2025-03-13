@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import supabase from "../subabase";
 
-const Verzehr = () => {
+const Verzehr = ({onSave}) => {
     const {id} = useParams();
     const [mitglied, setMitglied] = useState({name:'', vorname:''});
     const [mitglieder, setMitglieder] = useState([]);
@@ -12,6 +12,7 @@ const Verzehr = () => {
     const [selectedGetraenk, setSelectedGetraenk] = useState([]);
     const [currVerzehrliste, setCurrVerzehrliste] = useState([]);
 
+    const navigate = useNavigate();
     const numberformat= new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     const setValuesWithId = async () => {
@@ -66,56 +67,93 @@ const Verzehr = () => {
         
     }, []);
 
+    // Beim Verzehr wird nur hinzugefügt (ein komplett neuer Deckel oder auf dem Deckel ein neues Getränk!).
+    const insertVerzehr = async () => {
+        if (id) {
+            const {error} = await supabase.from("verzehr").insert({mitglied_id:id, getraenk_id: selectedGetraenk, anzahl:1});
+            if (error) console.log(error);
+        } else {
+            const {error} = await supabase.from("verzehr").insert({mitglied_id: selectedMitglied, getraenk_id: selectedGetraenk, anzahl:1});
+            if (error) console.log(error);
+        }
+        
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await insertVerzehr();
+        onSave();
+        };
+
     return(
         <div>
-            {id ? <h3>Edit {mitglied.name}</h3> : <h3>Neuer Deckel</h3>}
-            {id ? 
-                <div>
-                    <p><select
-                            className="form-select bg-secondary"
-                            value={selectedGetraenk}
-                            onChange={(e) => setSelectedGetraenk(e.target.value)}
-                        >
-                            <option value="">Getränk auswählen</option>
-                            {availableGetraenke.map((g) => (
-                                <option className="bg-info" key={g.id} value={g.id}>
-                                    {g.bezeichnung} {numberformat.format(g.preis)} €
-                                </option>
-                            ))}
-                        </select>
-                    </p>
+            <form onSubmit={handleSubmit}>
+                {id ? <h3>Edit {mitglied.name}</h3> : <h3>Neuer Deckel</h3>}
+                {id ? 
+                    <div>
+                        <p><select
+                                className="form-select bg-secondary"
+                                value={selectedGetraenk}
+                                onChange={(e) => setSelectedGetraenk(e.target.value)}
+                            >
+                                <option value="">Getränk auswählen</option>
+                                {availableGetraenke.map((g) => (
+                                    <option className="bg-info" key={g.id} value={g.id}>
+                                        {g.bezeichnung} {numberformat.format(g.preis)} €
+                                    </option>
+                                ))}
+                            </select>
+                        </p>
+                    </div>
+                    :
+                    <div>
+                        <p><select
+                                className="form-select bg-secondary"
+                                value={selectedMitglied}
+                                onChange={(e) => setSelectedMitglied(e.target.value)}
+                            >
+                                <option value="">Mitglied auswählen</option>
+                                {mitglieder.map((m) => (
+                                    <option className="bg-info" key={m.id} value={m.id}>
+                                        {m.name} {m.vorname}
+                                    </option>
+                                ))}
+                            </select>
+                        </p>
+                        <p><select
+                                className="form-select bg-secondary"
+                                value={selectedGetraenk}
+                                onChange={(e) => setSelectedGetraenk(e.target.value)}
+                            >
+                                <option value="">Getränk auswählen</option>
+                                {availableGetraenke.map((g) => (
+                                    <option className="bg-info" key={g.id} value={g.id}>
+                                        {g.bezeichnung} {numberformat.format(g.preis)} €
+                                    </option>
+                                ))}
+                            </select>
+                        </p>
+                    </div>
+                }
+                <div className="container text-center">
+                    <div className="row gx-1">
+                        <div className="col">
+                            <div className="p-1">
+                                <button type="submit" className="w-100 rounded btn btn-primary">
+                                    Speichern
+                                </button>
+                            </div>
+                        </div>
+                        <div className="col">
+                            <div className="p-1">
+                                <button type="cancel" className="w-100 rounded bg-primary text-light" onClick={() => navigate("/verzehrliste")}>
+                                    Abbrechen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                :
-                <div>
-                    <p><select
-                            className="form-select bg-secondary"
-                            value={selectedMitglied}
-                            onChange={(e) => setSelectedMitglied(e.target.value)}
-                        >
-                            <option value="">Mitglied auswählen</option>
-                            {mitglieder.map((m) => (
-                                <option className="bg-info" key={m.id} value={m.id}>
-                                    {m.name} {m.vorname}
-                                </option>
-                            ))}
-                        </select>
-                    </p>
-                    <p><select
-                            className="form-select bg-secondary"
-                            value={selectedGetraenk}
-                            onChange={(e) => setSelectedGetraenk(e.target.value)}
-                        >
-                            <option value="">Getränk auswählen</option>
-                            {availableGetraenke.map((g) => (
-                                <option className="bg-info" key={g.id} value={g.id}>
-                                    {g.bezeichnung} {numberformat.format(g.preis)} €
-                                </option>
-                            ))}
-                        </select>
-                    </p>
-                </div>
-            }
-
+            </form>
         </div>
     );
 }

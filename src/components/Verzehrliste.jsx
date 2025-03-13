@@ -49,8 +49,8 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
     return (
         <div className="p-4">
             <h2 className="text-info bg-dark p-2 text-center">
-                Deckelliste 
-                <button type="button" className="btn btn-primary" onClick={() => onAdd()}>
+                Deckelsammlung
+                <button type="button" className="ms-2 btn btn-primary" onClick={() => onAdd()}>
                     +
                 </button>
             </h2>
@@ -58,9 +58,9 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                 🔄 Aktualisieren
             </button>
             {gefilterteMitglieder.map((m) => (
-                    <div key={m.id} className="p-4 border rounded-lg shadow mb-1">
-                        <p className="bg">{m.name} {m.vorname}
-                            <button className="btn border-primary rounded" onClick={() => onEdit(m)}>+</button>
+                    <div key={m.id} className="mt-2">
+                        <p className="">{m.name} {m.vorname}
+                            <button className="ms-2 btn border-primary rounded" onClick={() => onEdit(m)}>+</button>
                         </p>
                         <div >
                             <table className="table table-bordered mt-2 border-primary p-1">
