@@ -126,13 +126,7 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                     <tr>
                                         <td colSpan="4" className="text-end">
                                             <button className="w-100 btn btn-primary"
-                                                onClick={(e) => {
-                                                    if (window.confirm("Achtung diese Aktion kann nicht rückgängig gemacht werden! Trotzdem weiter?") === true) 
-                                                        {
-                                                            e.preventDefault(); 
-                                                            bezahlen(m.id);
-                                                            }}}
-                                            >
+                                                onClick={() => onDelete(m.id)}>
                                                 Bezahlen
                                             </button>
                                         </td>

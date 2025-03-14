@@ -86,15 +86,17 @@ export default function App() {
         ladeDaten();
     }
     
-    // ---------- VERZEHR (Deckelmanagement) -----------------
-    const deleteVerzehr = async (id) => {
+    // ---------- VERZEHR (Deckelmanagement) Bezahlen des Deckels 
+    //  löscht alle Daten dieses Mitarbeiters in Tabelle Verzehr
+    // -----------------
+    const deleteVerzehr = async (mid) => {
         try {
             if (window.confirm("Achtung! Der Deckel wird jetzt weggeworfen und kann nicht wieder hergestellt werden. Trotzdem weiter?") === false) return;
 
             const response = await supabase
                 .from('verzehr')
                 .delete()
-                .eq('id', id)
+                .eq('mitglied_id', mid)
             console.log(response);
         }
         catch (error) {
@@ -140,7 +142,7 @@ export default function App() {
                 getraenke={getraenke}
                 onEdit={(verzehr) => navigate(`verzehr/${verzehr.id}`)}
                 onRefresh={ladeDaten}
-                onDelete={(id) => deleteVerzehr(id)}
+                onDelete={(mid) => deleteVerzehr(mid)}
                 onAdd={() => navigate(`/addverzehr`)}
                 />} 
             />
