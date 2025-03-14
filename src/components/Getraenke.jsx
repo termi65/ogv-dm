@@ -1,6 +1,5 @@
 import useScreenSize from "../utils/useScreenSize";
 
-
 const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
     const screenSize = useScreenSize();
     const numberformat= new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -10,7 +9,6 @@ const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
         <button className="btn btn-success btn-sm" onClick={onRefresh}>
           🔄 Aktualisieren
         </button>
-        <p>Bildschirmgröße: {screenSize}</p>
         <table className="table table-bordered mt-2 border-primary p-1">
             <thead>
                 <tr>

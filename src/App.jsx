@@ -10,6 +10,7 @@ import Verzehrliste from "./components/Verzehrliste";
 
 import supabase from "./subabase";
 import Verzehr from "./components/Verzehr";
+import SignUp from "./components/Signup";
 
 export default function App() {
     const navigate = useNavigate();
@@ -152,6 +153,9 @@ export default function App() {
             />
             <Route path="/addverzehr" element={<Verzehr 
                 onSave={() => {ladeDaten(); navigate("/verzehrliste");}} />} />
+            
+            <Route path="/signup" element={<SignUp 
+                onAnmelden={() => {ladeDaten(); navigate("/");}} />} />
 
         </Routes>
         </div>
