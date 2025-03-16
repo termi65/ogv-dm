@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import supabase from "../subabase";
+import { useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+const SignUp = ({onAnmelden}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const handleSignUp = async () => {
         setLoading(true);
@@ -35,6 +37,7 @@ const SignUp = () => {
 
         setLoading(false);
         console.log('Erfolgreich registriert & angemeldet:', data);
+        onAnmelden();
     };
 
     return (

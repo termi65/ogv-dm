@@ -25,13 +25,11 @@ export default function App() {
                 [
                     supabase.from('mitglieder').select('*').order('name', { ascending: true }),
                     supabase.from('getraenke').select('*').order('bezeichnung', { ascending: true }),
-                    supabase.from('verzehr').select('*').order('id', { ascending: true }),
+                    supabase.from('verzehr').select('*'),
                     supabase.from('verzehr').select(`
-                        id,
-                        anzahl,
-                        mitglied_id,
+                        id, anzahl, mitglied_id,
                         mitglieder (id, name, vorname),
-                        getraenke (id, bezeichnung, preis)`)
+                        getraenke (id, bezeichnung, preis)`).order('bezeichnung', { referencedTable: 'getraenke',  ascending: true })
                 ]);
             if (mitgliederRes.error || getraenkeRes.error || flatverzehrRes.error || verzehrRes.error) {
                 throw new Error(`Fehler beim Laden der Getränke (getraenke / verzehr / flatverzehr / mitglieder) ${getraenkeRes.status} / ${verzehrRes.status} /${flatverzehrRes.status} / ${mitgliederRes.status} /  `);
@@ -112,7 +110,7 @@ export default function App() {
 
     return (
         <div className="">
-        <Navigation />
+        <Navigation onRefresh={ladeDaten} />
         <Routes>
             <Route path="/" element={<Home />} />
             {/* -------------- Getränke -------------- */}

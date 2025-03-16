@@ -1,12 +1,22 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import supabase from "../subabase"; 
 
-export default function Navigation() {
+export default function Navigation({onRefresh}) {
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
+    
     const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
     const closeNav = () => {
         setIsNavCollapsed(true);
     };
+
+
+    const handleLogout = async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) console.error('Fehler beim Abmelden:', error.message);
+        onRefresh();
+      };
+
     return (
         <div className="d-flex flex-column p-4 align-items-center bg-dark">
             <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top navbar-on-top">
@@ -37,6 +47,9 @@ export default function Navigation() {
                             </li>
                             <li className="nav-item pe-1" key={5}>
                                 <Link to="/signup" className="px-2 text-info" onClick={closeNav}><i className="bi bi-fuel-pump"></i> Login/Registrieren</Link>
+                            </li>
+                            <li className="nav-item pe-1" key={6}>
+                                <Link to="/" className="px-2 text-info" onClick={() => {closeNav(); handleLogout();}}><i className="bi bi-fuel-pump"></i> Logout</Link>
                             </li>
                         </ul>
                     </div>
