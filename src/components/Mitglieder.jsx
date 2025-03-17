@@ -16,18 +16,18 @@ const Mitglieder = ({ mitglieder, onEdit, onRefresh, onDelete, onAdd }) => {
                     <th>Name</th>
                     <th>Vorname</th>
                     {screenSize ==="sm" || screenSize ==="xs" ? 
-                        <th>
+                        <th className="text-center">
                             <i className="bi bi-pencil-square"></i>
                         </th> 
                         :
-                        <th>Bearbeiten</th>
+                        <th className="text-center">Bearbeiten</th>
                     }
                     {screenSize ==="sm" || screenSize ==="xs" ? 
-                        <th>
+                        <th className="text-center">
                             <i className="bi bi-x-square"></i>
                         </th>
                         :
-                        <th>Löschen</th>
+                        <th className="text-center">Löschen</th>
                     }
                 </tr>
                 </thead>
@@ -37,18 +37,29 @@ const Mitglieder = ({ mitglieder, onEdit, onRefresh, onDelete, onAdd }) => {
                         <td>{m.name}</td>
                         <td>{m.vorname}</td>
                         {screenSize ==="sm" || screenSize ==="xs" ? 
-                            <td><button type="button" className="btn bg-primary text-light" onClick={() => onEdit(m)}><i className="bi bi-pencil-square"></i></button></td>
+                            <td className="text-center">
+                                <button type="button" className="btn bg-primary text-light" onClick={() => onEdit(m)}>
+                                    <i className="bi bi-pencil-square"></i>
+                                </button>
+                            </td>
                             :
-                            <td>
+                            <td className="text-center">
                                 <button type="button" className="btn bg-primary text-light" onClick={() => onEdit(m)}>
                                     Bearbeiten
                                 </button>
                             </td>
                         }
                         {screenSize ==="sm" || screenSize ==="xs" ? 
-                            <td><button type="button" className="btn bg-danger text-light" onClick={() => onDelete(m.id)}><i className="bi bi-x-square"></i></button></td>
+                            <td className="text-center">
+                                <button type="button" className="btn bg-danger text-light" onClick={() => onDelete(m.id)}>
+                                    <i className="bi bi-x-square"></i>
+                                </button></td>
                             :
-                            <td><button type="button" className="btn bg-danger text-light" onClick={() => onDelete(m.id)}>Löschen</button></td>
+                            <td className="text-center">
+                                <button type="button" className="btn bg-danger text-light" onClick={() => onDelete(m.id)}>
+                                    Löschen
+                                </button>
+                            </td>
                         }
                     </tr>
                 ))}

@@ -47,10 +47,10 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
     }
 
     return (
-        <div className="p-4">
+        <div className="container mt-4">
             <h2 className="text-info bg-dark p-2 text-center">
                 Deckelsammlung 
-                <button type="button" className="ms-2 btn btn-primary" onClick={() => onAdd()}>
+                <button type="button" className="ms-2 p-2 btn btn-primary" onClick={() => onAdd()}>
                     <i className="bi bi-cart-plus"></i>
                 </button>
             </h2>
@@ -72,8 +72,12 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                         <th className="text-end">Gesamt</th>
                                         <th className="text-center">+1</th>
                                         <th className="text-center">-1</th>
-                                        <th>{(screenSize ==="sm" || screenSize ==="xs" ) ? 
-                                            <i className="bi bi-x-square"></i> : <span>Löschen</span>}</th>
+                                        <th className="text-center">
+                                            {(screenSize ==="sm" || screenSize ==="xs" ) ? 
+                                                <i className="bi bi-x-square"></i> 
+                                                : 
+                                                <span>Löschen</span>}
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,17 +101,17 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                                             <td className="text-end text-danger">{numberformat.format(getraenk.preis * eintrag.anzahl)}</td>
                                                         </>}
                                                     <td className="text-center">
-                                                        <button className="w-100 btn btn-primary" onClick={(e) => {e.preventDefault(); incGetraenk(eintrag.id, eintrag.anzahl); }}>
+                                                        <button className="btn btn-primary" onClick={(e) => {e.preventDefault(); incGetraenk(eintrag.id, eintrag.anzahl); }}>
                                                             +
                                                         </button>
                                                     </td>
                                                     <td className="text-center">
-                                                        <button className="w-100 btn btn-primary"  onClick={(e) => {e.preventDefault(); decGetraenk(eintrag.id, eintrag.anzahl);}}>
+                                                        <button className="btn btn-primary"  onClick={(e) => {e.preventDefault(); decGetraenk(eintrag.id, eintrag.anzahl);}}>
                                                             -
                                                         </button>
                                                     </td>
                                                     <td className="text-center">
-                                                        <button className="w-100 bg-danger text-light btn btn-primary"  onClick={(e) => {if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === true) {e.preventDefault(); delGetraenk(eintrag.id);}}}>
+                                                        <button className="bg-danger text-light btn btn-primary"  onClick={(e) => {if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === true) {e.preventDefault(); delGetraenk(eintrag.id);}}}>
                                                             {(screenSize ==="sm" || screenSize ==="xs" ) ? 
                                                              <i className="bi bi-x-square"></i> 
                                                              : <span>Löschen</span>}
@@ -125,7 +129,7 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                     </tr>
                                     <tr>
                                         <td colSpan="4" className="text-end">
-                                            <button className="w-100 btn btn-primary"
+                                            <button className="btn btn-primary"
                                                 onClick={() => onDelete(m.id)}>
                                                 Bezahlen
                                             </button>

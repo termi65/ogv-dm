@@ -26,7 +26,7 @@ export default function App() {
             const [mitgliederRes, getraenkeRes, flatverzehrRes, verzehrRes] = await Promise.all(
                 [
                     supabase.from('mitglieder').select('*').order('name', { ascending: true }),
-                    supabase.from('getraenke').select('*').order('bezeichnung', { ascending: true }),
+                    supabase.from('getraenke').select('*'),
                     supabase.from('verzehr').select('*'),
                     supabase.from('verzehr').select(`
                         id, anzahl, mitglied_id,

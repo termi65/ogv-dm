@@ -29,8 +29,8 @@ const Login = ({onAnmelden}) => {
     }
 
     return(
-    	<div>
-            <h2>Anmelden</h2>
+    	<div className='container mt-4'>
+            <h2 className="text-info bg-dark p-2 text-center">Anmelden</h2>
             <form onSubmit={handleLogin}>            
                 <div className="mb-3">
                     <label htmlFor="email" className="mb-1 w-100 p-1 bg-primary text-light rounded">
@@ -44,10 +44,8 @@ const Login = ({onAnmelden}) => {
                     </label>
                     <input type="password" autoComplete="current-password" required placeholder="Passwort" className="form-control border border-primary" id="password" value={password} onChange={e => setPassword(e.target.value)} />
                 </div>
-                {/* <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-                <input type="password" placeholder="Passwort" value={password} onChange={e => setPassword(e.target.value)} /> */}
                 <button type="submit" className="w-100 rounded btn btn-primary" disabled={loading}>
-                    {loading ? 'Lädt...' : 'Registrieren & Anmelden'}
+                    {loading ? 'Lädt...' : 'Anmelden'}
                 </button>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             </form>

@@ -62,11 +62,11 @@ export default function Navigation({onRefresh}) {
                             </li>
                             {user ? 
                                 <li className="nav-item pe-1" key={5}>
-                                    <Link to="/" className="px-2 text-info" onClick={() => {closeNav(); handleLogout();}}><i class="bi bi-lock"></i>Logout</Link>
+                                    <Link to="/" className="px-2 text-info" onClick={() => {closeNav(); handleLogout();}}><i className="bi bi-lock"></i>Logout</Link>
                                 </li>
                                 :
                                 <li className="nav-item pe-1" key={6}>
-                                    <Link to="/login" className="px-2 text-info" onClick={closeNav}><i class="bi bi-unlock"></i>Login</Link>
+                                    <Link to="/login" className="px-2 text-info" onClick={closeNav}><i className="bi bi-unlock"></i>Login</Link>
                                 </li>
                             }
                             
