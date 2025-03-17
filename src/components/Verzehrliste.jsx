@@ -48,8 +48,7 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
 
     return (
         <div className="container mt-4">
-            <h2 className="text-info bg-dark p-2 text-center">
-                Deckelsammlung 
+            <h2 className="text-info bg-dark p-2 text-center">Deckelsammlung 
                 <button type="button" className="ms-2 p-2 btn btn-primary" onClick={() => onAdd()}>
                     <i className="bi bi-cart-plus"></i>
                 </button>

@@ -28,10 +28,15 @@ export default function App() {
                     supabase.from('mitglieder').select('*').order('name', { ascending: true }),
                     supabase.from('getraenke').select('*'),
                     supabase.from('verzehr').select('*'),
+                    // !!! supabase steckt wirklich voller Fehler!!!!
+                    // supabase.from('verzehr').select(`
+                    //     id, anzahl, mitglied_id,
+                    //     mitglieder (id, name, vorname),
+                    //     getraenke (id, bezeichnung, preis)`).order('bezeichnung', { referencedTable: 'getraenke',  ascending: true })
                     supabase.from('verzehr').select(`
                         id, anzahl, mitglied_id,
                         mitglieder (id, name, vorname),
-                        getraenke (id, bezeichnung, preis)`).order('bezeichnung', { referencedTable: 'getraenke',  ascending: true })
+                        getraenke (id, bezeichnung, preis)`).order('getraenke(bezeichnung)', { ascending: true })
                 ]);
             if (mitgliederRes.error || getraenkeRes.error || flatverzehrRes.error || verzehrRes.error) {
                 throw new Error(`Fehler beim Laden der Getränke (getraenke / verzehr / flatverzehr / mitglieder) ${getraenkeRes.status} / ${verzehrRes.status} /${flatverzehrRes.status} / ${mitgliederRes.status} /  `);
