@@ -3,7 +3,10 @@ const Mitglieder = ({ mitglieder, onEdit, onRefresh, onDelete, onAdd }) => {
     const screenSize = useScreenSize();
     return (
         <div className="container mt-4">
-            <h2 className="text-info bg-dark p-2 text-center">Mitgliederliste <button type="button" className="btn btn-primary"  onClick={() => onAdd()}>+</button></h2>
+            <h2 className="text-info bg-dark p-2 text-center">Mitgliederliste 
+                <button type="button" className="ms-2 p-2 btn btn-primary"  onClick={() => onAdd()}>
+                    <i className="bi bi-person-plus"></i>
+                </button></h2>
             <button className="btn btn-success btn-sm" onClick={onRefresh}>
                 🔄 Aktualisieren
             </button>

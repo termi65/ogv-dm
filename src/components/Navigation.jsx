@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import supabase from "../subabase"; 
 
 export default function Navigation({onRefresh}) {
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
-    
+    const [user, setUser] = useState(null);
+
     const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
     const closeNav = () => {
         setIsNavCollapsed(true);
@@ -17,6 +18,20 @@ export default function Navigation({onRefresh}) {
         onRefresh();
       };
 
+      useEffect(() => {
+        const checkUser = async () => {
+            const { data } = await supabase.auth.getUser();
+            setUser(data?.user);
+        };
+        
+        checkUser();
+        
+        const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user || null);
+        });
+
+        return () => authListener?.subscription.unsubscribe();
+    }, []);
     return (
         <div className="d-flex flex-column p-4 align-items-center bg-dark">
             <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top navbar-on-top">
@@ -45,12 +60,16 @@ export default function Navigation({onRefresh}) {
                             <li className="nav-item pe-1" key={4}>
                                 <Link to="/verzehrliste" className="px-2 text-info" onClick={closeNav}><i className="bi bi-book"></i> Deckelmanager</Link>
                             </li>
-                            <li className="nav-item pe-1" key={5}>
-                                <Link to="/signup" className="px-2 text-info" onClick={closeNav}><i className="bi bi-fuel-pump"></i> Login/Registrieren</Link>
-                            </li>
-                            <li className="nav-item pe-1" key={6}>
-                                <Link to="/" className="px-2 text-info" onClick={() => {closeNav(); handleLogout();}}><i className="bi bi-fuel-pump"></i> Logout</Link>
-                            </li>
+                            {user ? 
+                                <li className="nav-item pe-1" key={5}>
+                                    <Link to="/" className="px-2 text-info" onClick={() => {closeNav(); handleLogout();}}><i class="bi bi-lock"></i>Logout</Link>
+                                </li>
+                                :
+                                <li className="nav-item pe-1" key={6}>
+                                    <Link to="/login" className="px-2 text-info" onClick={closeNav}><i class="bi bi-unlock"></i>Login</Link>
+                                </li>
+                            }
+                            
                         </ul>
                     </div>
                 </div>

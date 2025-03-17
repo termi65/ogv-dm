@@ -80,7 +80,7 @@ const Mitglied = ({onSave}) => {
                     </div>
                     <div className="col">
                         <div className="p-1">
-                            <button type="cancel" className="w-100 rounded bg-primary text-light" onClick={() => navigate("/mitglieder")}>
+                            <button type="cancel" className="w-100 rounded btn btn-primary" onClick={() => navigate("/mitglieder")}>
                                 Abbrechen
                             </button>
                         </div>

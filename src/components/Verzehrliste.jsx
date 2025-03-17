@@ -49,9 +49,9 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
     return (
         <div className="p-4">
             <h2 className="text-info bg-dark p-2 text-center">
-                Deckelsammlung
+                Deckelsammlung 
                 <button type="button" className="ms-2 btn btn-primary" onClick={() => onAdd()}>
-                    +
+                    <i className="bi bi-cart-plus"></i>
                 </button>
             </h2>
             <button className="btn btn-success btn-sm" onClick={onRefresh}>
@@ -67,11 +67,11 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                 <thead>
                                     <tr>
                                         <th>Artikel</th>
-                                        <th>Anzahl</th>
-                                        <th>Preis</th>
-                                        <th>Gesamt</th>
-                                        <th>+1</th>
-                                        <th>-1</th>
+                                        <th className="text-center">Anzahl</th>
+                                        <th className="text-end">Preis</th>
+                                        <th className="text-end">Gesamt</th>
+                                        <th className="text-center">+1</th>
+                                        <th className="text-center">-1</th>
                                         <th>{(screenSize ==="sm" || screenSize ==="xs" ) ? 
                                             <i className="bi bi-x-square"></i> : <span>Löschen</span>}</th>
                                     </tr>
@@ -107,7 +107,7 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                                         </button>
                                                     </td>
                                                     <td className="text-center">
-                                                        <button className="w-100 btn btn-primary"  onClick={(e) => {if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === true) {e.preventDefault(); delGetraenk(eintrag.id);}}}>
+                                                        <button className="w-100 bg-danger text-light btn btn-primary"  onClick={(e) => {if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === true) {e.preventDefault(); delGetraenk(eintrag.id);}}}>
                                                             {(screenSize ==="sm" || screenSize ==="xs" ) ? 
                                                              <i className="bi bi-x-square"></i> 
                                                              : <span>Löschen</span>}

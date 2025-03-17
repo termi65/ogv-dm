@@ -1,27 +1,17 @@
 import { useState } from 'react';
 import supabase from "../subabase";
 
-const SignUp = ({onAnmelden}) => {
+const Login = ({onAnmelden}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const handleSignUp = async () => {
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        
         setLoading(true);
         setError(null);
-
-        // Benutzer registrieren
-        const { user, error } = await supabase.auth.signUp({
-            email,
-            password,
-        });
-
-        if (error) {
-            setError(error.message);
-            setLoading(false);
-            return;
-        }
 
         // Falls nötig, Benutzer automatisch anmelden
         const { data, error: loginError } = await supabase.auth.signInWithPassword({
@@ -34,14 +24,14 @@ const SignUp = ({onAnmelden}) => {
         }
 
         setLoading(false);
-        console.log('Erfolgreich registriert & angemeldet:', data);
+        console.log('Erfolgreich angemeldet:', data);
         onAnmelden();
-    };
+    }
 
-    return (
-        <div>
-            <h2>Registrieren</h2>
-            <form onSubmit={handleSignUp}>            
+    return(
+    	<div>
+            <h2>Anmelden</h2>
+            <form onSubmit={handleLogin}>            
                 <div className="mb-3">
                     <label htmlFor="email" className="mb-1 w-100 p-1 bg-primary text-light rounded">
                         Email
@@ -59,10 +49,10 @@ const SignUp = ({onAnmelden}) => {
                 <button type="submit" className="w-100 rounded btn btn-primary" disabled={loading}>
                     {loading ? 'Lädt...' : 'Registrieren & Anmelden'}
                 </button>
-            </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
+            </form>
         </div>
     );
 }
 
-export default SignUp;
+export default Login;

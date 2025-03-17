@@ -5,7 +5,10 @@ const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
     const numberformat= new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     return (
       <div className="container mt-4">
-        <h1 className="text-info bg-dark p-2 text-center">Getränkeliste <button type="button" onClick={() => onAdd()} className="btn btn-primary">+</button></h1>
+        <h2 className="text-info bg-dark p-2 text-center">Getränkeliste 
+            <button type="button" onClick={() => onAdd()} className="ms-2 p-2 btn btn-primary">
+                <i className="bi bi-clipboard-plus"></i>
+            </button></h2>
         <button className="btn btn-success btn-sm" onClick={onRefresh}>
           🔄 Aktualisieren
         </button>
