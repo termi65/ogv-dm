@@ -10,7 +10,7 @@ import Verzehrliste from "./components/Verzehrliste";
 
 import supabase from "./subabase";
 import Verzehr from "./components/Verzehr";
-import SignUp from "./components/Signup";
+import SignUp from "./components/SignUp";
 
 export default function App() {
     const navigate = useNavigate();
