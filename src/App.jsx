@@ -97,7 +97,6 @@ export default function App() {
     // -----------------
     const deleteVerzehr = async (mid) => {
         try {
-            if (window.confirm("Achtung! Der Deckel wird jetzt weggeworfen und kann nicht wieder hergestellt werden. Trotzdem weiter?") === false) return;
 
             const response = await supabase
                 .from('verzehr')

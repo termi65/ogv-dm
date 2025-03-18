@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import useScreenSize from "../utils/useScreenSize";
 import supabase from "../subabase";
+import Dialog from "./Dialog";
 
 const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
     const screenSize = useScreenSize();
     const numberformat= new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    const [showModal, setShowModal] = useState(false);
+
+    const [currentMID, setCurrentMID] = useState(0);
 
     const berechneGesamtsummeMitglied = (mid) => {
         const filteredvl = verzehrliste.filter((item) => item.mitglied_id === mid);
@@ -110,7 +115,8 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                                         </button>
                                                     </td>
                                                     <td className="text-center">
-                                                        <button className="bg-danger text-light btn btn-primary"  onClick={(e) => {if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === true) {e.preventDefault(); delGetraenk(eintrag.id);}}}>
+                                                        <button className="bg-danger text-light btn btn-primary"  
+                                                            onClick={(e) => {if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === true) {e.preventDefault(); delGetraenk(eintrag.id);}}}>
                                                             {(screenSize ==="sm" || screenSize ==="xs" ) ? 
                                                              <i className="bi bi-x-square"></i> 
                                                              : <span>Löschen</span>}
@@ -129,7 +135,7 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                     <tr>
                                         <td colSpan="4" className="text-end">
                                             <button className="btn btn-primary"
-                                                onClick={() => onDelete(m.id)}>
+                                                onClick={() => {setCurrentMID(m.id); setShowModal(true)}}>
                                                 Bezahlen
                                             </button>
                                         </td>
@@ -140,6 +146,11 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                         </div>
                     </div>)
                 )}
+            <Dialog show={showModal}
+                title='Achtung'
+                text='Wollen Sie wirklich bezahlen? Der Deckel wird dann gelöscht!'
+                handleClose={() => setShowModal(false)}
+                handleOK={() => {setShowModal(false); onDelete(currentMID)}}/>
         </div>
     );
 }
