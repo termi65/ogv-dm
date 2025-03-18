@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Dialog({show, title, text, handleClose, handleOK}) {
+function Dialog({show, title, text, nurOK, handleClose, handleOK}) {
 
   return (
     <>
@@ -12,10 +12,14 @@ function Dialog({show, title, text, handleClose, handleOK}) {
         </Modal.Header>
         <Modal.Body>{text}</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Abbrechen
-          </Button>
-          <Button variant="primary" onClick={handleOK}>Speichern</Button>
+            {nurOK ?
+                <Button variant="secondary" onClick={handleClose}>OK</Button>
+                :
+                <div>
+                    <Button variant="secondary" onClick={handleClose}>Abbrechen</Button>
+                    <Button variant="primary" onClick={handleOK}>OK</Button>
+                </div>
+            }
         </Modal.Footer>
       </Modal>
     </>

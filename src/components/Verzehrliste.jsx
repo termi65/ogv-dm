@@ -149,6 +149,7 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
             <Dialog show={showModal}
                 title='Achtung'
                 text='Wollen Sie wirklich bezahlen? Der Deckel wird dann gelöscht!'
+                nurOK={false}
                 handleClose={() => setShowModal(false)}
                 handleOK={() => {setShowModal(false); onDelete(currentMID)}}/>
         </div>

@@ -12,7 +12,7 @@ import supabase from "./subabase";
 import Verzehr from "./components/Verzehr";
 import SignUp from "./components/SignUp";
 import Login from "./components/Login";
-
+import Dialog from "./components/Dialog";
 
 export default function App() {
     const navigate = useNavigate();
@@ -21,12 +21,17 @@ export default function App() {
     const [flatverzehr, setFlatverzehr] = useState([]);
     const [verzehr, setVerzehr] = useState([]);
 
+    const [showModal, setShowModal] = useState(false);
+    const [text,setText] = useState('Eintrag wirklich löschen?');
+    const [title, setTitle] = useState('Achtung!');
+    const [nurOK, setNurOK] = useState(false);
+    
     const ladeDaten = async () => {
         try {
             const [mitgliederRes, getraenkeRes, flatverzehrRes, verzehrRes] = await Promise.all(
                 [
                     supabase.from('mitglieder').select('*').order('name', { ascending: true }),
-                    supabase.from('getraenke').select('*'),
+                    supabase.from('getraenke').select('*').order('bezeichnung', { ascending: true }),
                     supabase.from('verzehr').select('*'),
                     // !!! supabase steckt wirklich voller Fehler!!!!
                     // supabase.from('verzehr').select(`
@@ -116,55 +121,62 @@ export default function App() {
 
     return (
         <div className="">
-        <Navigation onRefresh={ladeDaten} />
-        <Routes>
-            <Route path="/" element={<Home />} />
-            {/* -------------- Getränke -------------- */}
-            <Route path="/getraenke" element={<Getraenke getraenke={getraenke} 
-                onEdit={(drink) => navigate(`/getraenk/${drink.id}`)} 
-                onRefresh={ladeDaten} 
-                onDelete={(drinkId) => deleteGetraenk(drinkId)} 
-                onAdd = {() => navigate(`/addgetraenk`)} />} 
-            />
-            <Route path="/getraenk/:id" element={<Getraenk onSave={() => { ladeDaten(); navigate("/getraenke"); }} />} />
-            <Route path="/addgetraenk" element={<Getraenk onSave={() => { ladeDaten(); navigate("/getraenke");}} />} />
-            
-            {/* -------------- Mitglieder -------------- */}
-            <Route path="/mitglieder" element={<Mitglieder mitglieder={mitglieder}
-                onEdit={(mitglied) => navigate(`mitglied/${mitglied.id}`)}
-                onRefresh={ladeDaten}
-                onDelete={(mId) => deleteMitglied(mId)}
-                onAdd={() => navigate(`/addmitglied`)}
-                />} 
-            />
-            <Route path="/mitglied/:id" element={<Mitglied onSave={() => {ladeDaten(); navigate("/mitglieder");}} />} />
-            <Route path="/addmitglied" element={<Mitglied onSave={() => {ladeDaten(); navigate("/mitglieder");}} />} />
-            
-            {/* -------------- Verzehr -------------- */}
-            <Route path="/verzehrliste" element={<Verzehrliste 
-                verzehrliste={verzehr} 
-                mitglieder={mitglieder}
-                getraenke={getraenke}
-                onEdit={(verzehr) => navigate(`verzehr/${verzehr.id}`)}
-                onRefresh={ladeDaten}
-                onDelete={(mid) => deleteVerzehr(mid)}
-                onAdd={() => navigate(`/addverzehr`)}
-                />} 
-            />
-            <Route path="/verzehr/:id" element={<Verzehr 
-                onSave={() => {ladeDaten(); navigate("/verzehrliste");}} 
-                />}
-            />
-            <Route path="/addverzehr" element={<Verzehr 
-                onSave={() => {ladeDaten(); navigate("/verzehrliste");}} />} />
-            
-            <Route path="/signup" element={<SignUp 
-                onAnmelden={() => {ladeDaten(); navigate("/");}} />} />
+            <Navigation onRefresh={ladeDaten} />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                {/* -------------- Getränke -------------- */}
+                <Route path="/getraenke" element={<Getraenke getraenke={getraenke} 
+                    onEdit={(drink) => navigate(`/getraenk/${drink.id}`)} 
+                    onRefresh={ladeDaten} 
+                    onDelete={(drinkId) => deleteGetraenk(drinkId)} 
+                    onAdd = {() => navigate(`/addgetraenk`)} />} 
+                />
+                <Route path="/getraenk/:id" element={<Getraenk onSave={() => { ladeDaten(); navigate("/getraenke"); }} />} />
+                <Route path="/addgetraenk" element={<Getraenk onSave={() => { ladeDaten(); navigate("/getraenke");}} />} />
+                
+                {/* -------------- Mitglieder -------------- */}
+                <Route path="/mitglieder" element={<Mitglieder mitglieder={mitglieder}
+                    onEdit={(mitglied) => navigate(`mitglied/${mitglied.id}`)}
+                    onRefresh={ladeDaten}
+                    onDelete={(mId) => deleteMitglied(mId)}
+                    onAdd={() => navigate(`/addmitglied`)}
+                    />} 
+                />
+                <Route path="/mitglied/:id" element={<Mitglied onSave={() => {ladeDaten(); navigate("/mitglieder");}} />} />
+                <Route path="/addmitglied" element={<Mitglied onSave={() => {ladeDaten(); navigate("/mitglieder");}} />} />
+                
+                {/* -------------- Verzehr -------------- */}
+                <Route path="/verzehrliste" element={<Verzehrliste 
+                    verzehrliste={verzehr} 
+                    mitglieder={mitglieder}
+                    getraenke={getraenke}
+                    onEdit={(verzehr) => navigate(`verzehr/${verzehr.id}`)}
+                    onRefresh={ladeDaten}
+                    onDelete={(mid) => deleteVerzehr(mid)}
+                    onAdd={() => navigate(`/addverzehr`)}
+                    />} 
+                />
+                <Route path="/verzehr/:id" element={<Verzehr 
+                    onSave={() => {ladeDaten(); navigate("/verzehrliste");}} 
+                    />}
+                />
+                <Route path="/addverzehr" element={<Verzehr 
+                    onSave={() => {ladeDaten(); navigate("/verzehrliste");}} />} />
+                
+                <Route path="/signup" element={<SignUp 
+                    onAnmelden={() => {ladeDaten(); navigate("/");}} />} />
 
-            <Route path="/login" element={<Login 
-                onAnmelden={() => {ladeDaten(); navigate("/");}} />} />
+                <Route path="/login" element={<Login 
+                    onAnmelden={() => {ladeDaten(); navigate("/");}} />} />
 
-        </Routes>
+            </Routes>
+            <Dialog show={showModal}
+                title={title}
+                text={text}
+                nurOK={nurOK}
+                handleClose={() => setShowModal(false)}
+                handleOK={() => {setShowModal(false); onDelete(currentMID)}}/>
+
         </div>
     );
 }
