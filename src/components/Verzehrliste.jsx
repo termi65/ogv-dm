@@ -7,10 +7,14 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
     const screenSize = useScreenSize();
     const numberformat= new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    const [showModal, setShowModal] = useState(false);
-
+    // Für die modalen Dialog relevanten Variablen
+    const [showModalDeckel, setShowModalDeckel] = useState(false);
+    const [showModalEintrag, setShowModalEintrag] = useState(false);
+        
     const [currentMID, setCurrentMID] = useState(0);
+    const [currentVerzehrId, setCurrentVerzehrId] = useState(0);
 
+    // Funktionen
     const berechneGesamtsummeMitglied = (mid) => {
         const filteredvl = verzehrliste.filter((item) => item.mitglied_id === mid);
         return filteredvl.reduce((sum, vl) => sum + vl.getraenke.preis * vl.anzahl, 0);
@@ -116,7 +120,8 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                                     </td>
                                                     <td className="text-center">
                                                         <button className="bg-danger text-light btn btn-primary"  
-                                                            onClick={(e) => {if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === true) {e.preventDefault(); delGetraenk(eintrag.id);}}}>
+                                                            onClick={() => {setCurrentVerzehrId(eintrag.id); setShowModalEintrag(true);}}>
+                                                                 {/* if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === true) {e.preventDefault(); delGetraenk(eintrag.id);}}}> */}
                                                             {(screenSize ==="sm" || screenSize ==="xs" ) ? 
                                                              <i className="bi bi-x-square"></i> 
                                                              : <span>Löschen</span>}
@@ -135,7 +140,7 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                     <tr>
                                         <td colSpan="4" className="text-end">
                                             <button className="btn btn-primary"
-                                                onClick={() => {setCurrentMID(m.id); setShowModal(true)}}>
+                                                onClick={() => {setCurrentMID(m.id); setShowModalDeckel(true)}}>
                                                 Bezahlen
                                             </button>
                                         </td>
@@ -146,12 +151,19 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                         </div>
                     </div>)
                 )}
-            <Dialog show={showModal}
+            <Dialog show={showModalDeckel}
                 title='Achtung'
                 text='Wollen Sie wirklich bezahlen? Der Deckel wird dann gelöscht!'
                 nurOK={false}
-                handleClose={() => setShowModal(false)}
-                handleOK={() => {setShowModal(false); onDelete(currentMID)}}/>
+                handleClose={() => setShowModalDeckel(false)}
+                handleOK={() => {setShowModalDeckel(false); onDelete(currentMID)}}/>
+
+            <Dialog show={showModalEintrag}
+                title='Achtung'
+                text='Soll der Eintrag wirklich gelöscht werden?'
+                nurOK={false}
+                handleClose={() => setShowModalEintrag(false)}
+                handleOK={() => {setShowModalEintrag(false); delGetraenk(currentVerzehrId)}}/>
         </div>
     );
 }

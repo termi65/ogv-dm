@@ -54,7 +54,7 @@ export default function Getraenk({onSave}) {
 
     return (
     <div className="container mt-4">
-        <h2 className="text-info bg-dark p-2 text-center">{id ? 'Getränk bearbeiten' : 'Einfügen'}</h2>
+        <h2 className="text-info bg-dark p-2 text-center">{id ? 'Getränk bearbeiten' : 'Getränk einfügen'}</h2>
         <form onSubmit={handleSubmit}>
             <div className="mb-3">
                 <label htmlFor="bezeichnung" className="mb-1 w-100 p-1 bg-primary text-light rounded">
@@ -62,6 +62,7 @@ export default function Getraenk({onSave}) {
                 </label>
                 <input
                     type="text"
+                    required
                     id="bezeichnung"
                     value={formData.bezeichnung}
                     onChange={(e) => setFormData({ ...formData, bezeichnung: e.target.value })}
@@ -71,6 +72,7 @@ export default function Getraenk({onSave}) {
             <div className="mb-3">
                 <label htmlFor="preis" className="mb-1 w-100 p-1 bg-primary text-light rounded">Preis</label>
                 <input
+                    required
                     type="text"
                     id="preis"
                     value={preis}
@@ -81,7 +83,7 @@ export default function Getraenk({onSave}) {
             <div className="row gx-1">
                 <div className="col">
                     <div className="p-1">
-                        <button type="button" onClick={() => navigate("/getraenke")} className="w-100 rounded bg-primary text-light">
+                        <button type="cancel" onClick={() => navigate("/getraenke")} className="w-100 rounded bg-primary text-light">
                             Abbrechen
                         </button>
                     </div>

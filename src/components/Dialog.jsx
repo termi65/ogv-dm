@@ -16,8 +16,8 @@ function Dialog({show, title, text, nurOK, handleClose, handleOK}) {
                 <Button variant="secondary" onClick={handleClose}>OK</Button>
                 :
                 <div>
+                    <Button variant="primary" onClick={handleOK}>OK</Button> &nbsp;
                     <Button variant="secondary" onClick={handleClose}>Abbrechen</Button>
-                    <Button variant="primary" onClick={handleOK}>OK</Button>
                 </div>
             }
         </Modal.Footer>
