@@ -84,9 +84,10 @@ const Verzehr = ({onSave}) => {
         };
 
     return(
-        <div>
+        <div className="container mt-4">
             <form onSubmit={handleSubmit}>
-                {id ? <h3>Edit {mitglied.name}</h3> : <h3>Neuer Deckel</h3>}
+                {id ? <h5 className="text-info bg-dark p-2 text-center">Deckel von {mitglied.vorname} {mitglied.name} bearbeiten</h5> 
+                    : <h5 className="text-info bg-dark p-2 text-center">Neuer Deckel</h5>}
                 {id ? 
                     <div>
                         <p><select
@@ -144,7 +145,7 @@ const Verzehr = ({onSave}) => {
                         </div>
                         <div className="col">
                             <div className="p-1">
-                                <button type="cancel" className="w-100 rounded bg-primary text-light" onClick={() => navigate("/verzehrliste")}>
+                                <button className="w-100 rounded btn btn-primary" onClick={() => navigate("/verzehrliste")}>
                                     Abbrechen
                                 </button>
                             </div>

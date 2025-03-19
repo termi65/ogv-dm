@@ -83,15 +83,15 @@ export default function Getraenk({onSave}) {
             <div className="row gx-1">
                 <div className="col">
                     <div className="p-1">
-                        <button type="cancel" onClick={() => navigate("/getraenke")} className="w-100 rounded bg-primary text-light">
-                            Abbrechen
+                        <button className="w-100 rounded btn btn-primary">
+                            Speichern
                         </button>
                     </div>
                 </div>
                 <div className="col">
                     <div className="p-1">
-                        <button type="submit" className="w-100 rounded bg-primary text-light">
-                            Speichern
+                        <button type="cancel" onClick={() => navigate("/getraenke")} className="w-100 rounded btn btn-primary">
+                            Abbrechen
                         </button>
                     </div>
                 </div>
