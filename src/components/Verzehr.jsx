@@ -54,8 +54,6 @@ const Verzehr = ({onSave}) => {
                 setCurrVerzehrliste(flatverzehrRes.data); 
                 setAvailableGetraenke(getraenkeRes.data); 
 
-                // const filteredGetraenke = getraenkeRes.data.filter(getraenk => flatverzehrRes.data.some(v => v.getraenke_id === getraenk.id));
-                // setAvailableGetraenke(filteredGetraenke);
             } catch(error) {
                 console.error("Fehler beim Laden der Daten:", error);
             };

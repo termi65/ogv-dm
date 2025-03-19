@@ -21,7 +21,10 @@ export default function App() {
     const [flatverzehr, setFlatverzehr] = useState([]);
     const [verzehr, setVerzehr] = useState([]);
 
-    const [showModal, setShowModal] = useState(false);
+    const [currentMID, setCurrentMID] = useState(0);
+    const [currentDrinkID, setCurrentDrinkID] = useState(0);
+    const [showMitgliedModal, setShowMitgliedModal] = useState(false);
+    const [showDrinkModal, setShowDrinkModal] = useState(false);
     const [text,setText] = useState('Eintrag wirklich löschen?');
     const [title, setTitle] = useState('Achtung!');
     const [nurOK, setNurOK] = useState(false);
@@ -56,13 +59,6 @@ export default function App() {
     }
 
     const deleteGetraenk = async (id) => {
-        const index = flatverzehr.findIndex((f) => f.getraenke_id === id);
-        if (index !== -1) {
-            window.alert("Getränk wird im Verzehr verwendet und kann somit nicht gelöscht werden!");
-            return;
-        }
-
-        if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === false) return;
         try {
             const { error } = await supabase.from('getraenke').delete().eq('id', id);
             if (error) {
@@ -73,17 +69,59 @@ export default function App() {
             console.error("Unerwarteter Fehler:", err);
             alert("Unerwarteter Fehler beim Löschen!");
         }
+        ladeDaten();
+    }
+
+    const GetraenkInVerzehr = (id) => {
+        const index = flatverzehr.findIndex((f) => f.getraenk_id === id);
+        if (index !== -1) {
+            return true;
+        }
+    }
+    
+    const GetraenkIsRemovable = (id) => {
+        if (GetraenkInVerzehr(id)) {
+            setText("Getränk kann nicht gelöscht werden, da es noch auf einem Deckel steht!");
+            setNurOK(true);
+            setShowDrinkModal(true);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    const ShowRemoveGetraenk = () => {
+        setText("Soll das Getränk wirklich gelöscht werden?");
+        setNurOK(false);
+        setShowDrinkModal(true);
+    }
+
+    const MitgliedInVerzehr = (id) => {
+        const index = flatverzehr.findIndex((v) => v.mitglied_id === id);
+        if (index !== -1) {
+            return true;
+        }
+    }
+
+    const MitgliedIsRemovable = (id) => {
+        if (MitgliedInVerzehr(id)) {
+            setText("Mitglied kann nicht gelöscht werden, da es noch zu bezahlen hat.");
+            setNurOK(true);
+            setShowMitgliedModal(true);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    const ShowRemoveMitglied = () => {
+        setText("Soll das Mitglied wirklich gelöscht werden?");
+        setNurOK(false);
+        setShowMitgliedModal(true);
     }
 
     const deleteMitglied = async (id) => {
         try {
-            const index = flatverzehr.findIndex((v) => v.mitglied_id === id);
-            if (index !== -1) {
-                window.alert("Mitglied kann nicht gelöscht werden, da es noch zu bezahlen hat.");
-                return;
-            }
-
-            if (window.confirm("Soll der Eintrag wirklich gelöscht werden?") === false) return;
 
             const response = await supabase
                 .from('mitglieder')
@@ -128,7 +166,7 @@ export default function App() {
                 <Route path="/getraenke" element={<Getraenke getraenke={getraenke} 
                     onEdit={(drink) => navigate(`/getraenk/${drink.id}`)} 
                     onRefresh={ladeDaten} 
-                    onDelete={(drinkId) => deleteGetraenk(drinkId)} 
+                    onDelete={(drinkId) => {if (GetraenkIsRemovable(drinkId)) {setCurrentDrinkID(drinkId); ShowRemoveGetraenk(); }}} 
                     onAdd = {() => navigate(`/addgetraenk`)} />} 
                 />
                 <Route path="/getraenk/:id" element={<Getraenk onSave={() => { ladeDaten(); navigate("/getraenke"); }} />} />
@@ -138,7 +176,7 @@ export default function App() {
                 <Route path="/mitglieder" element={<Mitglieder mitglieder={mitglieder}
                     onEdit={(mitglied) => navigate(`mitglied/${mitglied.id}`)}
                     onRefresh={ladeDaten}
-                    onDelete={(mId) => deleteMitglied(mId)}
+                    onDelete={(mId) => {if (MitgliedIsRemovable(mId)) {setCurrentMID(mId); ShowRemoveMitglied();}}}
                     onAdd={() => navigate(`/addmitglied`)}
                     />} 
                 />
@@ -170,12 +208,27 @@ export default function App() {
                     onAnmelden={() => {ladeDaten(); navigate("/");}} />} />
 
             </Routes>
-            <Dialog show={showModal}
+            <Dialog show={showMitgliedModal}
                 title={title}
                 text={text}
                 nurOK={nurOK}
-                handleClose={() => setShowModal(false)}
-                handleOK={() => {setShowModal(false); onDelete(currentMID)}}/>
+                handleClose={() => setShowMitgliedModal(false)}
+                handleOK={() => {
+                    setShowMitgliedModal(false); 
+                    deleteMitglied(currentMID);
+                    }
+                }/>
+
+            <Dialog show={showDrinkModal}
+                title={title}
+                text={text}
+                nurOK={nurOK}
+                handleClose={() => setShowDrinkModal(false)}
+                handleOK={() => {
+                    setShowDrinkModal(false);
+                    deleteGetraenk(currentDrinkID);
+                    }
+                }/>
 
         </div>
     );

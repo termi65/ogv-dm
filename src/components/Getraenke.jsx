@@ -2,6 +2,7 @@ import useScreenSize from "../utils/useScreenSize";
 
 const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
     const screenSize = useScreenSize();
+    
     const numberformat= new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     return (
       <div className="container mt-4">
@@ -75,6 +76,7 @@ const Getraenke = ({ getraenke, onEdit, onRefresh, onDelete, onAdd }) => {
             ))}
             </tbody>
         </table>
+
       </div>
     );
 }

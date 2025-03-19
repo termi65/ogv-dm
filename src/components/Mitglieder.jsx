@@ -1,6 +1,9 @@
+import { useState } from "react";
 import useScreenSize from "../utils/useScreenSize";
+
 const Mitglieder = ({ mitglieder, onEdit, onRefresh, onDelete, onAdd }) => {
     const screenSize = useScreenSize();
+
     return (
         <div className="container mt-4">
             <h2 className="text-info bg-dark p-2 text-center">Mitgliederliste 
