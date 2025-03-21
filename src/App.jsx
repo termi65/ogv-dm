@@ -10,7 +10,7 @@ import Verzehrliste from "./components/Verzehrliste";
 
 import supabase from "./subabase";
 import Verzehr from "./components/Verzehr";
-import SignUp from "./components/SignUp";
+import RegisterForm from "./components/RegisterForm";
 import Login from "./components/Login";
 import Dialog from "./components/Dialog";
 
@@ -201,10 +201,10 @@ export default function App() {
                 <Route path="/addverzehr" element={<Verzehr 
                     onSave={() => {ladeDaten(); navigate("/verzehrliste");}} />} />
                 
-                <Route path="/signup" element={<SignUp 
-                    onAnmelden={() => {ladeDaten(); navigate("/");}} />} />
-
                 <Route path="/login" element={<Login 
+                    onAnmelden={() => {ladeDaten(); navigate("/");}} />} />
+                
+                <Route path="/register" element={<RegisterForm 
                     onAnmelden={() => {ladeDaten(); navigate("/");}} />} />
 
             </Routes>
