@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import supabase from "../subabase";
 
 const Login = ({onAnmelden}) => {
@@ -22,11 +22,22 @@ const Login = ({onAnmelden}) => {
         if (loginError) {
             setError(loginError.message);
         }
+        const { data: sessionData } = await supabase.auth.getSession();
+        console.log("Neue Session:", sessionData);
+
 
         setLoading(false);
         console.log('Erfolgreich angemeldet:', data);
         onAnmelden();
     }
+
+    useEffect(() => {
+        const fetchUser = async () => {
+          const { data: user } = await supabase.auth.getUser();
+          setUser(user);
+        };
+        fetchUser();
+      }, []);
 
     return(
     	<div className='container mt-4'>
