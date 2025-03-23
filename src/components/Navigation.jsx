@@ -48,18 +48,23 @@ export default function Navigation({onRefresh}) {
                     </button>
                     <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id="togglerData">
                         <ul className="navbar-nav me-auto">
+                            <li><p> </p></li>
                             <li className="nav-item" key={1}>
                                 <Link to="/" className="px-2 text-info" onClick={closeNav}><i className="bi bi-house-door"></i> Start</Link>
                             </li>
+                            <li><p> </p></li>
                             <li className="nav-item" key={2}>
                                 <Link to="/getraenke" className="px-2 text-info" onClick={closeNav}><i className="bi bi-fuel-pump"></i> Getränke</Link>
                             </li>
+                            <li><p> </p></li>
                             <li className="nav-item pe-1" key={3}>
                                 <Link to="/mitglieder" className="px-2 text-info" onClick={closeNav}><i className="bi bi-file-person"></i> Mitglieder</Link>
                             </li>
+                            <li><p> </p></li>
                             <li className="nav-item pe-1" key={4}>
                                 <Link to="/verzehrliste" className="px-2 text-info" onClick={closeNav}><i className="bi bi-book"></i> Deckelmanager</Link>
                             </li>
+                            <li><p> </p></li>
                             {user ? 
                                 <li className="nav-item pe-1" key={5}>
                                     <Link to="/" className="px-2 text-info" onClick={() => {closeNav(); handleLogout();}}><i className="bi bi-lock"></i>Logout</Link>
@@ -69,13 +74,15 @@ export default function Navigation({onRefresh}) {
                                     <li className="nav-item pe-1" key={6}>
                                         <Link to="/login" className="px-2 text-info" onClick={closeNav}><i className="bi bi-unlock"></i>Login</Link>
                                     </li>
+                                    <li><p> </p></li>
                                     <li className="nav-item pe-1" key={7}>
                                         <Link to="/register" className="px-2 text-info" onClick={closeNav}><i className="bi bi-send-plus"></i>Registrieren</Link>
                                     </li>
                                 </>
                             }
+                            <li><p> </p></li>
                             <li className="px-2 text-info" key={8}>
-                                V 1.0.2
+                                V 1.0.3
                             </li>                            
                         </ul>
                     </div>
