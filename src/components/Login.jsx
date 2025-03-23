@@ -6,7 +6,8 @@ const Login = ({onAnmelden}) => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
+    const [user, setUser] = useState(null);
+    
     const handleLogin = async (e) => {
         e.preventDefault();
         
