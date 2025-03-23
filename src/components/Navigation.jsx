@@ -75,7 +75,7 @@ export default function Navigation({onRefresh}) {
                                 </>
                             }
                             <li className="px-2 text-info" key={8}>
-                                V 1.0.1
+                                V 1.0.2
                             </li>                            
                         </ul>
                     </div>

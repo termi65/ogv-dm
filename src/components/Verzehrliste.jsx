@@ -75,9 +75,9 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                 <thead>
                                     <tr>
                                         <th>Artikel</th>
-                                        <th className="text-center">Anzahl</th>
-                                        <th className="text-end">Preis</th>
-                                        <th className="text-end">Gesamt</th>
+                                        <th className="text-center">#</th>
+                                        <th className="text-end">€</th>
+                                        <th className="text-end">∑</th>
                                         <th className="text-center">+1</th>
                                         <th className="text-center">-1</th>
                                         <th className="text-center">
@@ -133,7 +133,7 @@ const Verzehrliste = ({ verzehrliste, mitglieder, getraenke, onEdit, onRefresh, 
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colSpan="3" className="text-right">Gesamt:</td>
+                                        <td colSpan="3" className="text-end fw-bold">Gesamt:</td>
                                         <td className={`text-end fw-bolder ${berechneGesamtsummeMitglied(m.id) >= 0 ? "text-dark" : "text-danger"}`}>{numberformat.format(berechneGesamtsummeMitglied(m.id))} €</td>
                                         <td colSpan="3"></td>
                                     </tr>
